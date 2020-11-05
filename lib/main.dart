@@ -17,7 +17,7 @@ class App extends StatelessWidget {
         child: MaterialApp(
           title: Constants.TITLE,
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.indigo,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: Landing(),

@@ -15,35 +15,35 @@ class UnixTime {
 
     final int year = since.inDays ~/ 365;
     if (year > 0) {
-      return '$year years ago';
+      return '$year years';
     }
 
     final int month = since.inDays ~/ 30;
     if (month > 0) {
-      return '$month months ago';
+      return '$month months';
     }
 
     final int week = since.inDays ~/ 7;
     if (week > 0) {
-      return '$week weeks ago';
+      return '$week weeks';
     }
 
     if (since.inDays > 0) {
-      return '${since.inDays} days ago';
+      return '${since.inDays} days';
     }
 
     if (since.inHours > 0) {
-      return '${since.inHours} hours ago';
+      return '${since.inHours} hours';
     }
 
     if (since.inMinutes > 0) {
-      return '${since.inMinutes} minutes ago';
+      return '${since.inMinutes} minutes';
     }
 
     if (since.inSeconds > 0) {
-      return '${since.inSeconds} seconds ago';
+      return '${since.inSeconds} seconds';
     }
 
-    return 'Less than a second ago';
+    return 'Less than a second';
   }
 }
