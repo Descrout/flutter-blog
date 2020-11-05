@@ -7,6 +7,9 @@ class Article {
   final String body;
   final UnixTime createdAt;
   final UnixTime updatedAt;
+  final int commentCount;
+  final int favoriteCount;
+  final bool favoriteStatus;
   final User user;
 
   Article(
@@ -15,6 +18,9 @@ class Article {
       this.body,
       this.createdAt,
       this.updatedAt,
+      this.commentCount,
+      this.favoriteCount,
+      this.favoriteStatus,
       this.user});
 
   Article.fromJson(Map<String, dynamic> parsed)
@@ -23,5 +29,8 @@ class Article {
         body = parsed['body'],
         createdAt = UnixTime(parsed['created_at']),
         updatedAt = UnixTime(parsed['updated_at']),
+        commentCount = parsed['comment_count'],
+        favoriteCount = parsed['favorites'],
+        favoriteStatus = parsed['fav_status'],
         user = User.fromJson(parsed['user']);
 }

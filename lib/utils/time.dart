@@ -10,7 +10,7 @@ class UnixTime {
     return '${date.day}/${date.month}/${date.year}';
   }
 
-  String toStringPassed() {
+  String passedSinceStr() {
     final Duration since = this.passedSince;
 
     final int year = since.inDays ~/ 365;

@@ -34,8 +34,30 @@ class Landing extends StatelessWidget {
     return ListTile(
       title: Text(article.title),
       leading: Text(article.id.toString()),
-      subtitle: Text(
-          '${article.createdAt.toString()} - ${article.createdAt.toStringPassed()}'),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text('${article.commentCount} '),
+              Icon(
+                Icons.comment,
+                color: Colors.blueAccent,
+              ),
+              SizedBox(
+                width: 50,
+              ),
+              Text('${article.favoriteCount} '),
+              (article.favoriteStatus
+                  ? Icon(Icons.favorite, color: Colors.red)
+                  : Icon(Icons.favorite_border, color: Colors.red)),
+            ],
+          ),
+          Text(
+              '${article.createdAt.toString()} - ${article.createdAt.passedSinceStr()}'),
+        ],
+      ),
     );
   }
 }
