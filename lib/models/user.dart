@@ -15,4 +15,12 @@ class User {
         email = parsed['email'],
         image = parsed['image'],
         role = Role.fromJson(parsed['role']);
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'email': email,
+        'image': image,
+        'role': role.toJson(),
+      };
 }

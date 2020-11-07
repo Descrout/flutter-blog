@@ -9,4 +9,10 @@ class Role {
       : id = parsed['id'],
         name = parsed['name'],
         code = parsed['code'];
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'code': code,
+      };
 }
