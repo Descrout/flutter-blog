@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/globals.dart';
-import 'package:flutter_blog/services/user_service.dart';
+import 'package:flutter_blog/services/auth_service.dart';
 
 enum AuthStatus { Authenticating, Authenticated, Unauthenticated }
 
@@ -8,7 +8,7 @@ class AuthProvider with ChangeNotifier {
   AuthStatus _status = AuthStatus.Unauthenticated;
   AuthStatus get status => _status;
 
-  final UserService _service = UserService();
+  final AuthService _service = AuthService();
 
   String _error;
   String get error => _error;
