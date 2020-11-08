@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/models/article.dart';
 
-class ArticleWidget extends StatelessWidget {
+class ArticleItem extends StatelessWidget {
   final Article article;
-  final VoidCallback onPressed;
 
-  ArticleWidget({@required this.article, this.onPressed});
+  ArticleItem(this.article);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +30,10 @@ class ArticleWidget extends StatelessWidget {
         height: 20,
         child: Row(
           children: [
-            Icon(Icons.comment, color: Colors.black45),
+            Icon(Icons.comment_rounded,
+                color: article.commentCount > 0
+                    ? Colors.blueAccent
+                    : Colors.black45),
             Text('${article.commentCount} ')
           ],
         ),
@@ -46,7 +48,9 @@ class ArticleWidget extends StatelessWidget {
         height: 20,
         child: Row(
           children: [
-            Icon(Icons.favorite, color: Colors.black45),
+            (article.favoriteStatus
+                ? Icon(Icons.favorite, color: Colors.red)
+                : Icon(Icons.favorite_border, color: Colors.black45)),
             Text('${article.favoriteCount} '),
           ],
         ),

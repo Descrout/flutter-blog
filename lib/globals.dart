@@ -12,7 +12,8 @@ class Item<T> {
 class Globals {
   static const SERVER = "206.189.111.249:6444";
   static const TITLE = "Flutter Blog App";
-  static const ARTICLE_IN_PAGE = 10;
+  static const ARTICLES_IN_PAGE = 10;
+  static const USERS_IN_PAGE = 10;
 
   Globals._internal();
   static final Globals shared = Globals._internal();
@@ -23,7 +24,12 @@ class Globals {
   readFromFile() async {
     SharedPreferences storage = await SharedPreferences.getInstance();
     token = storage.getString('token');
-    user = User.fromJson(convert.jsonDecode(storage.getString('user')));
+    final userStr = storage.getString('user');
+    if (userStr != null) {
+      user = User.fromJson(convert.jsonDecode(userStr));
+    } else {
+      user = null;
+    }
   }
 
   saveToFile() async {

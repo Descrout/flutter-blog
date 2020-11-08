@@ -25,11 +25,12 @@ class UserDrawer extends StatelessWidget {
 
   Widget header() {
     return DrawerHeader(
-      child: Center(
-        child: Image.network('${Globals.SERVER}${Globals.shared.user.image}'),
-      ),
+      child: Container(),
       decoration: BoxDecoration(
         color: Colors.indigo,
+        image: DecorationImage(
+            image: NetworkImage(Globals.shared.user.getImageURL),
+            fit: BoxFit.cover),
       ),
     );
   }

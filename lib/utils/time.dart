@@ -1,7 +1,7 @@
 class UnixTime {
   final int sinceEpoch;
 
-  UnixTime(dynamic unix) : sinceEpoch = (unix as int) * 1000;
+  UnixTime(int unix) : sinceEpoch = (unix ?? 0) * 1000;
   DateTime get date => DateTime.fromMillisecondsSinceEpoch(this.sinceEpoch);
   Duration get passedSince => DateTime.now().toUtc().difference(this.date);
 

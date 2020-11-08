@@ -7,7 +7,6 @@ class QueryParams {
   int _from = 0;
   int _to = 0;
   bool excludeUser = false;
-  bool remember = false;
 
   set from(DateTime from) =>
       this._from = from.toUtc().millisecondsSinceEpoch ~/ 1000;
@@ -40,10 +39,6 @@ class QueryParams {
 
     if (this.excludeUser) {
       params["user"] = "0";
-    }
-
-    if (this.remember) {
-      params["remember"] = '1';
     }
 
     return params;

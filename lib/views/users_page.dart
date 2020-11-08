@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/globals.dart';
-import 'package:flutter_blog/models/article.dart';
+import 'package:flutter_blog/models/user.dart';
 import 'package:flutter_blog/providers/auth_provider.dart';
 import 'package:flutter_blog/providers/list_provider.dart';
 import 'package:flutter_blog/widgets/bottom_nav.dart';
 import 'package:flutter_blog/views/routes.dart';
-import 'package:flutter_blog/widgets/article_item.dart';
 import 'package:flutter_blog/widgets/guest_drawer.dart';
 import 'package:flutter_blog/widgets/user_drawer.dart';
+import 'package:flutter_blog/widgets/user_item.dart';
 import 'package:provider/provider.dart';
 
-class LandingPage extends StatelessWidget {
+class UsersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +58,9 @@ class LandingPage extends StatelessWidget {
                 child: TabBar(
                   labelColor: Colors.indigo,
                   tabs: [
-                    Tab(text: "Articles", icon: Icon(Icons.article)),
+                    Tab(
+                        text: "Users",
+                        icon: Icon(Icons.supervised_user_circle)),
                     Tab(text: "Filter", icon: Icon(Icons.filter_list)),
                   ],
                 ),
@@ -66,31 +68,31 @@ class LandingPage extends StatelessWidget {
             ];
           },
           body: TabBarView(children: [
-            Consumer<ListProvider<Article>>(
-              builder: (_, articles, __) => RefreshIndicator(
-                  child: _buildArticles(articles), onRefresh: articles.refresh),
+            Consumer<ListProvider<User>>(
+              builder: (_, users, __) => RefreshIndicator(
+                  child: _buildUsers(users), onRefresh: users.refresh),
             ),
-            Text("ARTİCLE FILTERS HERE"),
+            Text("USER FILTERS HERE"),
           ]),
         ),
       ),
       bottomNavigationBar: BottomNav(
-        currentPage: Routes.Landing,
+        currentPage: Routes.Users,
         onSamePage: () {},
       ),
     );
   }
 
-  Widget _buildArticles(ListProvider<Article> articles) {
+  Widget _buildUsers(ListProvider<User> users) {
     return ListView.separated(
         itemBuilder: (ctx, i) {
-          if (i < articles.length) {
-            return ArticleItem(articles.at(i));
+          if (i < users.length) {
+            return UserItem(users.at(i));
           }
-          articles.extend();
+          users.extend();
           return Center(child: CircularProgressIndicator());
         },
         separatorBuilder: (ctx, i) => Divider(),
-        itemCount: articles.listLength);
+        itemCount: users.listLength);
   }
 }
