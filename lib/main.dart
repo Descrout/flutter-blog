@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'models/article.dart';
 import 'models/user.dart';
 
-void main() {
+void main() async {
   runApp(App());
 }
 
@@ -23,9 +23,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (ctx) => AuthProvider()),
         ChangeNotifierProvider(create: (ctx) => articleProvider),
         ChangeNotifierProvider(create: (ctx) => userProvider),
-        ChangeNotifierProvider(create: (ctx) => AuthProvider()),
         ChangeNotifierProvider(create: (ctx) => ValidationProvider()),
       ],
       child: materialApp(),

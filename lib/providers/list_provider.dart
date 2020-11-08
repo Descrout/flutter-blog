@@ -22,7 +22,7 @@ class ListProvider<T> with ChangeNotifier {
   T at(int i) => _items[i];
 
   Future<void> refresh() async {
-    params.page = 0;
+    params.page = 1;
     _items.clear();
     await this._add();
     notifyListeners();

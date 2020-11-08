@@ -6,14 +6,8 @@ class BottomNav extends StatelessWidget {
   final int _currentIndex;
   final VoidCallback onSamePage;
 
-  static const _pages = [
-    Routes.Landing,
-    Routes.Users,
-    Routes.Contact,
-  ];
-
   BottomNav({Key key, @required this.currentPage, @required this.onSamePage})
-      : _currentIndex = _pages.indexOf(currentPage),
+      : _currentIndex = Routes.KEYNAMES.indexOf(currentPage),
         super(key: key);
 
   @override
@@ -24,7 +18,7 @@ class BottomNav extends StatelessWidget {
             onSamePage();
             return;
           }
-          final route = _pages[index];
+          final route = Routes.KEYNAMES[index];
           Navigator.of(context).pushReplacementNamed(route);
         },
         currentIndex: _currentIndex,

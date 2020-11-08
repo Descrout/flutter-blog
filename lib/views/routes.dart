@@ -10,6 +10,12 @@ abstract class Routes {
   static const Users = '/users';
   static const Contact = '/contact';
 
+  static const KEYNAMES = [
+    Routes.Landing,
+    Routes.Users,
+    Routes.Contact,
+  ];
+
   static final _routes = {
     Landing: LandingPage(),
     Users: UsersPage(),
