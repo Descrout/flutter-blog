@@ -1,14 +1,12 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_blog/blog_api.dart';
 import 'package:flutter_blog/globals.dart';
-import 'package:flutter_blog/services/auth_service.dart';
 
 enum AuthStatus { Authenticating, Authenticated, Unauthenticated }
 
 class AuthProvider with ChangeNotifier {
   AuthStatus _status = AuthStatus.Unauthenticated;
   AuthStatus get status => _status;
-
-  final AuthService _service = AuthService();
 
   String _error;
   String get error => _error;
@@ -30,7 +28,7 @@ class AuthProvider with ChangeNotifier {
   login(String email, String password) async {
     _status = AuthStatus.Authenticating;
     notifyListeners();
-    final user = await _service.login(email, password);
+    final user = await Blog.login(email, password);
     if (user.success) {
       _status = AuthStatus.Authenticated;
       Globals.shared.user = user.data;

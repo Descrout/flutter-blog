@@ -62,42 +62,17 @@ class ListPage<T> extends StatelessWidget {
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
+          controller: _controller,
           floatHeaderSlivers: true,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverToBoxAdapter(
-                child: TabBar(
-                  onTap: (i) {
-                    if (i == 0) {
-                      _controller.animateTo(0,
-                          duration: Duration(seconds: 2),
-                          curve: Curves.fastOutSlowIn);
-                    }
-                  },
-                  labelColor: Colors.indigo,
-                  tabs: [
-                    tab,
-                    Tab(text: "Filter", icon: Icon(Icons.filter_list)),
-                  ],
-                ),
-              )
-            ];
+            return <Widget>[_tabBar()];
           },
           body: TabBarView(children: [
             Consumer<ListProvider<T>>(
               builder: (_, items, __) => RefreshIndicator(
-                  child: ListView.separated(
-                      controller: _controller,
-                      itemBuilder: (ctx, i) {
-                        if (i < items.length) {
-                          return builder(context, items.at(i));
-                        }
-                        items.extend();
-                        return Center(child: CircularProgressIndicator());
-                      },
-                      separatorBuilder: (ctx, i) => Divider(),
-                      itemCount: items.listLength),
-                  onRefresh: items.refresh),
+                child: _buildItems(context, items),
+                onRefresh: items.refresh,
+              ),
             ),
             filter,
           ]),
@@ -105,11 +80,44 @@ class ListPage<T> extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNav(
         currentPage: name,
-        onSamePage: () {
-          _controller.animateTo(0,
-              duration: Duration(seconds: 2), curve: Curves.fastOutSlowIn);
-        },
+        onSamePage: _scrollTop,
       ),
     );
+  }
+
+  void _scrollTop() {
+    _controller.animateTo(
+      0,
+      duration: Duration(milliseconds: 1500),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  Widget _tabBar() {
+    return SliverToBoxAdapter(
+      child: TabBar(
+        onTap: (i) {
+          if (i == 0) _scrollTop();
+        },
+        labelColor: Colors.indigo,
+        tabs: [
+          tab,
+          Tab(text: "Filter", icon: Icon(Icons.filter_list)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItems(BuildContext ctx, ListProvider<T> items) {
+    return ListView.separated(
+        itemBuilder: (ctx, i) {
+          if (i < items.length) {
+            return builder(ctx, items.at(i));
+          }
+          items.extend();
+          return Center(child: CircularProgressIndicator());
+        },
+        separatorBuilder: (ctx, i) => Divider(),
+        itemCount: items.listLength);
   }
 }

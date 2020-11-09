@@ -1,18 +1,16 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_blog/models/model_json.dart';
-import 'package:flutter_blog/services/service.dart';
+import 'package:flutter_blog/blog_api.dart';
 import 'package:flutter_blog/utils/query_params.dart';
 
 class ListProvider<T> with ChangeNotifier {
-  final Service service;
   final int itemCapacity;
+  final String endpoint;
 
   List<T> _items = List<T>();
   int _lastCount;
   QueryParams params = QueryParams();
 
-  ListProvider({@required String endpoint, @required this.itemCapacity})
-      : service = Service(endpoint) {
+  ListProvider(this.endpoint, this.itemCapacity) {
     this._add();
   }
 
@@ -24,8 +22,8 @@ class ListProvider<T> with ChangeNotifier {
   Future<void> refresh() async {
     params.page = 1;
     _items.clear();
-    await this._add();
     notifyListeners();
+    await this._add();
   }
 
   void extend() {
@@ -34,12 +32,14 @@ class ListProvider<T> with ChangeNotifier {
   }
 
   Future<void> _add() async {
-    final itemsResponse = await service.getMultiple(params);
-    if (itemsResponse.success) {
-      this._lastCount = itemsResponse.data.length;
-      _items.addAll(
-          itemsResponse.data.map<T>((item) => fromJson<T>(item)).toList());
-      notifyListeners();
+    final itemsResponse = await Blog.getList<T>(endpoint, params);
+    if (!itemsResponse.success) {
+      print('Error while adding page to list : ${itemsResponse.error}');
+      return;
     }
+
+    this._lastCount = itemsResponse.data.length;
+    _items.addAll(itemsResponse.data);
+    notifyListeners();
   }
 }
