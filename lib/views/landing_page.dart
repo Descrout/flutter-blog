@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/views/list_page.dart';
 import 'package:flutter_blog/views/routes.dart';
+import 'package:flutter_blog/views/list_filter.dart';
 import 'package:flutter_blog/widgets/article_item.dart';
 
 class LandingPage extends ListPage<Article> {
@@ -12,6 +13,6 @@ class LandingPage extends ListPage<Article> {
           name: Routes.Landing,
           builder: (ctx, article) => ArticleItem(article),
           tab: Tab(text: "Articles", icon: Icon(Icons.article)),
-          filter: Text("Article Filter To Be Implemented."),
+          filter: ListFilter<Article>(),
         );
 }

@@ -1,19 +1,34 @@
-enum SortType { POPULAR, COMMENT, NEW }
+enum SortType { NEW, POPULAR, COMMENT }
 
 class QueryParams {
   int page = 1;
   String search = "";
-  SortType sort;
-  int _from = 0;
-  int _to = 0;
-  bool excludeUser = false;
+  SortType sort = SortType.NEW;
+  DateTime from = DateTime(2020);
+  DateTime to = DateTime.now();
 
-  set from(DateTime from) =>
-      this._from = from.toUtc().millisecondsSinceEpoch ~/ 1000;
+  int get fromUnix => from.toUtc().millisecondsSinceEpoch ~/ 1000;
+  int get toUnix => to.toUtc().millisecondsSinceEpoch ~/ 1000;
 
-  set to(DateTime to) => this._to = to.toUtc().millisecondsSinceEpoch ~/ 1000;
+  clearSearch() {
+    page = 1;
+    search = "";
+  }
 
-  String get date => "$_from|$_to";
+  clearDates() {
+    from = DateTime(2020);
+    to = DateTime.now();
+  }
+
+  clearOrder() {
+    sort = SortType.NEW;
+  }
+
+  clearFilters() {
+    page = 1;
+    clearOrder();
+    clearDates();
+  }
 
   Map<String, String> getAll() {
     var params = {"page": this.page.toString()};
@@ -22,8 +37,8 @@ class QueryParams {
       params["search"] = this.search;
     }
 
-    if (this._to > 0) {
-      params["date"] = this.date;
+    if (this.toUnix > 0) {
+      params["date"] = "$fromUnix|$toUnix";
     }
 
     switch (this.sort) {
@@ -35,10 +50,6 @@ class QueryParams {
         break;
       default:
         break;
-    }
-
-    if (this.excludeUser) {
-      params["user"] = "0";
     }
 
     return params;
