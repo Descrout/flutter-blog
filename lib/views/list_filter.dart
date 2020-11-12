@@ -16,8 +16,7 @@ class ListFilter<T> extends StatelessWidget {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             Row(
               children: [
@@ -27,8 +26,8 @@ class ListFilter<T> extends StatelessWidget {
                 ),
                 (list.dateFiltered
                     ? IconButton(
-                        color: Colors.indigo,
-                        icon: Icon(Icons.refresh_rounded),
+                        color: Colors.red,
+                        icon: Icon(Icons.close),
                         onPressed: list.clearDateFilters,
                       )
                     : SizedBox.shrink()),
@@ -46,8 +45,8 @@ class ListFilter<T> extends StatelessWidget {
                 ),
                 (list.orderFiltered
                     ? IconButton(
-                        color: Colors.indigo,
-                        icon: Icon(Icons.refresh_rounded),
+                        color: Colors.red,
+                        icon: Icon(Icons.close),
                         onPressed: list.clearOrderFilter,
                       )
                     : SizedBox.shrink()),

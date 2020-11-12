@@ -27,23 +27,23 @@ class ListProvider<T> with ChangeNotifier {
       SortType.values.map((e) => _params.sort == e).toList();
   T at(int i) => _items[i];
 
-  clearDateFilters() {
+  clearDateFilters() async {
     _params.clearDates();
     _dateFiltered = false;
-    notifyListeners();
+    await refresh();
   }
 
-  clearOrderFilter() {
+  clearOrderFilter() async {
     _params.clearOrder();
     _orderFiltered = false;
-    notifyListeners();
+    await refresh();
   }
 
-  clearFilters() {
+  clearFilters() async {
     _params.clearFilters();
     _dateFiltered = false;
     _orderFiltered = false;
-    notifyListeners();
+    await refresh();
   }
 
   setDate(bool from, DateTime date) async {

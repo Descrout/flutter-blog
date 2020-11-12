@@ -65,7 +65,28 @@ class ListPage<T> extends StatelessWidget {
           controller: _controller,
           floatHeaderSlivers: true,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[_tabBar()];
+            return <Widget>[
+              _tabBar(),
+              SliverToBoxAdapter(
+                child: Selector<ListProvider<T>, bool>(
+                  builder: (context, isFiltered, child) {
+                    if (isFiltered) {
+                      return ListTile(
+                        title: Text("Click to remove all filters",
+                            style: TextStyle(color: Colors.white)),
+                        onTap:
+                            Provider.of<ListProvider<T>>(context, listen: false)
+                                .clearFilters,
+                        leading: Icon(Icons.close, color: Colors.white),
+                        tileColor: Colors.green,
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
+                  selector: (context, list) => list.filtered,
+                ),
+              ),
+            ];
           },
           body: TabBarView(children: [
             Consumer<ListProvider<T>>(
