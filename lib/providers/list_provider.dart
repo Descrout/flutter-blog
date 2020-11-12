@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/blog_api.dart';
+import 'package:flutter_blog/globals.dart';
 import 'package:flutter_blog/utils/query_params.dart';
 
 class ListProvider<T> with ChangeNotifier {
@@ -13,9 +14,7 @@ class ListProvider<T> with ChangeNotifier {
   bool _orderFiltered = false;
   bool _searchFiltered = false;
 
-  ListProvider(this._endpoint, this._itemCapacity) {
-    _add();
-  }
+  ListProvider(this._endpoint, this._itemCapacity);
 
   bool get dateFiltered => _dateFiltered;
   bool get orderFiltered => _orderFiltered;
@@ -25,6 +24,7 @@ class ListProvider<T> with ChangeNotifier {
   int get length => _items.length;
   int get listLength => _items.length + (this.hasMore ? 1 : 0);
   bool get hasMore => _lastCount == _itemCapacity;
+  bool get isEmpty => _items.isEmpty;
   QueryParams get params => _params;
   List<bool> get selectedOrder =>
       SortType.values.map((e) => _params.sort == e).toList();
@@ -84,7 +84,7 @@ class ListProvider<T> with ChangeNotifier {
 
   extend() async {
     _params.page += 1;
-    await _add();
+    await fetch();
   }
 
   Future<void> refresh() async {
@@ -92,10 +92,10 @@ class ListProvider<T> with ChangeNotifier {
     _params.page = 1;
     _items.clear();
     notifyListeners();
-    await _add();
+    await fetch();
   }
 
-  Future<void> _add() async {
+  Future<void> fetch() async {
     final itemsResponse = await Blog.getList<T>(_endpoint, _params);
     if (!itemsResponse.success) {
       print('Error while adding page to list : ${itemsResponse.error}');

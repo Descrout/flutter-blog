@@ -31,28 +31,26 @@ class ListPage<T> extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(Globals.TITLE),
-          leading: Builder(builder: (context) {
-            return Consumer<AuthProvider>(
-              builder: (ctx, auth, _) {
-                if (auth.status == AuthStatus.Authenticated) {
-                  return InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(Globals.shared.user.getImageURL),
-                      ),
+          leading: Consumer<AuthProvider>(
+            builder: (ctx, auth, _) {
+              if (auth.status == AuthStatus.Authenticated) {
+                return InkWell(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(Globals.shared.user.getImageURL),
                     ),
-                    onTap: () => Scaffold.of(context).openDrawer(),
-                  );
-                }
-                return IconButton(
-                  icon: const Icon(Icons.person),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
+                  onTap: () => Scaffold.of(ctx).openDrawer(),
                 );
-              },
-            );
-          }),
+              }
+              return IconButton(
+                icon: const Icon(Icons.person),
+                onPressed: () => Scaffold.of(ctx).openDrawer(),
+              );
+            },
+          ),
           actions: [
             Builder(builder: (context) {
               return IconButton(
@@ -102,7 +100,24 @@ class ListPage<T> extends StatelessWidget {
           body: TabBarView(children: [
             Consumer<ListProvider<T>>(
               builder: (_, items, __) => RefreshIndicator(
-                child: _buildItems(context, items),
+                child: (items.isEmpty
+                    ? ListView(
+                        children: [
+                          SizedBox(height: 50),
+                          Center(
+                              child:
+                                  Icon(Icons.mood_bad, color: Colors.indigo)),
+                          Center(
+                              child: Text(
+                            "Nothing to show.",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                                color: Colors.indigo),
+                          )),
+                        ],
+                      )
+                    : _buildItems(context, items)),
                 onRefresh: items.refresh,
               ),
             ),

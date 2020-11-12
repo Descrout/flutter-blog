@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/blog_api.dart';
 import 'package:flutter_blog/globals.dart';
+import 'package:flutter_blog/models/article.dart';
+import 'package:flutter_blog/models/user.dart';
+import 'package:flutter_blog/providers/list_provider.dart';
 
 enum AuthStatus { Authenticating, Authenticated, Unauthenticated }
 
@@ -11,12 +14,14 @@ class AuthProvider with ChangeNotifier {
   String _error;
   String get error => _error;
 
-  AuthProvider() {
-    init();
+  AuthProvider(ListProvider<Article> articles, ListProvider<User> users) {
+    init(articles, users);
   }
 
-  init() async {
+  init(ListProvider<Article> articles, ListProvider<User> users) async {
     await Globals.shared.readFromFile();
+    articles.fetch();
+    users.fetch();
     if (Globals.shared.token != null) {
       _status = AuthStatus.Authenticated;
     } else {
