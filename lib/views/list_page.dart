@@ -26,42 +26,53 @@ class ListPage<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(Globals.TITLE),
-        leading: Builder(builder: (context) {
-          return Consumer<AuthProvider>(
-            builder: (ctx, auth, _) {
-              if (auth.status == AuthStatus.Authenticated) {
-                return InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(Globals.shared.user.getImageURL),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(Globals.TITLE),
+          leading: Builder(builder: (context) {
+            return Consumer<AuthProvider>(
+              builder: (ctx, auth, _) {
+                if (auth.status == AuthStatus.Authenticated) {
+                  return InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(Globals.shared.user.getImageURL),
+                      ),
                     ),
-                  ),
-                  onTap: () => Scaffold.of(context).openDrawer(),
+                    onTap: () => Scaffold.of(context).openDrawer(),
+                  );
+                }
+                return IconButton(
+                  icon: const Icon(Icons.person),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
                 );
-              }
+              },
+            );
+          }),
+          actions: [
+            Builder(builder: (context) {
               return IconButton(
-                icon: const Icon(Icons.person),
-                onPressed: () => Scaffold.of(context).openDrawer(),
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  DefaultTabController.of(context)
+                      .animateTo(1, duration: Duration(seconds: 2));
+                },
               );
-            },
-          );
-        }),
-      ),
-      drawer: Drawer(
-        child: Consumer<AuthProvider>(
-          builder: (_, user, __) => (user.status == AuthStatus.Authenticated
-              ? UserDrawer()
-              : GuestDrawer()),
+            })
+          ],
         ),
-      ),
-      body: DefaultTabController(
-        length: 2,
-        child: NestedScrollView(
+        drawer: Drawer(
+          child: Consumer<AuthProvider>(
+            builder: (_, user, __) => (user.status == AuthStatus.Authenticated
+                ? UserDrawer()
+                : GuestDrawer()),
+          ),
+        ),
+        body: NestedScrollView(
           controller: _controller,
           floatHeaderSlivers: true,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -98,10 +109,10 @@ class ListPage<T> extends StatelessWidget {
             filter,
           ]),
         ),
-      ),
-      bottomNavigationBar: BottomNav(
-        currentPage: name,
-        onSamePage: _scrollTop,
+        bottomNavigationBar: BottomNav(
+          currentPage: name,
+          onSamePage: _scrollTop,
+        ),
       ),
     );
   }

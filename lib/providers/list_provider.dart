@@ -11,6 +11,7 @@ class ListProvider<T> with ChangeNotifier {
   QueryParams _params = QueryParams();
   bool _dateFiltered = false;
   bool _orderFiltered = false;
+  bool _searchFiltered = false;
 
   ListProvider(this._endpoint, this._itemCapacity) {
     _add();
@@ -18,7 +19,9 @@ class ListProvider<T> with ChangeNotifier {
 
   bool get dateFiltered => _dateFiltered;
   bool get orderFiltered => _orderFiltered;
-  bool get filtered => _dateFiltered || _orderFiltered;
+  bool get searchFiltered => _searchFiltered;
+  bool get filtered => _dateFiltered || _orderFiltered || _searchFiltered;
+  String get search => _params.search;
   int get length => _items.length;
   int get listLength => _items.length + (this.hasMore ? 1 : 0);
   bool get hasMore => _lastCount == _itemCapacity;
@@ -26,6 +29,12 @@ class ListProvider<T> with ChangeNotifier {
   List<bool> get selectedOrder =>
       SortType.values.map((e) => _params.sort == e).toList();
   T at(int i) => _items[i];
+
+  clearSearchFilters() async {
+    _params.clearSearch();
+    _searchFiltered = false;
+    await refresh();
+  }
 
   clearDateFilters() async {
     _params.clearDates();
@@ -43,6 +52,14 @@ class ListProvider<T> with ChangeNotifier {
     _params.clearFilters();
     _dateFiltered = false;
     _orderFiltered = false;
+    _searchFiltered = false;
+    await refresh();
+  }
+
+  setSearch(String value) async {
+    if (_params.search == value && value == "") return;
+    _params.search = value;
+    _searchFiltered = true;
     await refresh();
   }
 

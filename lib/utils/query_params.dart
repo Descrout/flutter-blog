@@ -11,7 +11,6 @@ class QueryParams {
   int get toUnix => to.toUtc().millisecondsSinceEpoch ~/ 1000;
 
   clearSearch() {
-    page = 1;
     search = "";
   }
 
@@ -28,6 +27,7 @@ class QueryParams {
     page = 1;
     clearOrder();
     clearDates();
+    clearSearch();
   }
 
   Map<String, String> getAll() {

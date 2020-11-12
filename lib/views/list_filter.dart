@@ -13,6 +13,11 @@ class ListFilter<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = context.watch<ListProvider<T>>();
+    final _search = TextFormField(
+      initialValue: list.search,
+      onFieldSubmitted: list.setSearch,
+    );
+
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -21,21 +26,20 @@ class ListFilter<T> extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "Date Range",
+                  "Search",
                   style: TextStyle(fontSize: 18),
                 ),
-                (list.dateFiltered
+                (list.searchFiltered
                     ? IconButton(
                         color: Colors.red,
                         icon: Icon(Icons.close),
-                        onPressed: list.clearDateFilters,
+                        onPressed: list.clearSearchFilters,
                       )
-                    : SizedBox.shrink()),
+                    : SizedBox.shrink())
               ],
             ),
             Divider(),
-            SizedBox(height: 20),
-            _customDatePicker(context, list),
+            _search,
             SizedBox(height: 30),
             Row(
               children: [
@@ -55,6 +59,25 @@ class ListFilter<T> extends StatelessWidget {
             Divider(),
             SizedBox(height: 20),
             _sortPicker(list),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Text(
+                  "Date Range",
+                  style: TextStyle(fontSize: 18),
+                ),
+                (list.dateFiltered
+                    ? IconButton(
+                        color: Colors.red,
+                        icon: Icon(Icons.close),
+                        onPressed: list.clearDateFilters,
+                      )
+                    : SizedBox.shrink()),
+              ],
+            ),
+            Divider(),
+            SizedBox(height: 20),
+            _customDatePicker(context, list),
           ],
         ),
       ),
