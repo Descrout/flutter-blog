@@ -19,16 +19,21 @@ class ListProvider<T> with ChangeNotifier {
   bool get dateFiltered => _dateFiltered;
   bool get orderFiltered => _orderFiltered;
   bool get searchFiltered => _searchFiltered;
-  bool get filtered => _dateFiltered || _orderFiltered || _searchFiltered;
   String get search => _params.search;
   int get length => _items.length;
-  int get listLength => _items.length + (this.hasMore ? 1 : 0);
-  bool get hasMore => _lastCount == _itemCapacity;
   bool get isEmpty => _items.isEmpty;
   QueryParams get params => _params;
+
+  bool get filtered => _dateFiltered || _orderFiltered || _searchFiltered;
+
+  int get listLength => _items.length + (this.hasMore ? 1 : 0);
+
+  bool get hasMore => _lastCount == _itemCapacity;
+
   List<bool> get selectedOrder =>
       SortType.values.map((e) => _params.sort == e).toList();
-  T at(int i) => _items[i];
+
+  T operator [](int i) => _items[i];
 
   clearSearchFilters() async {
     _params.clearSearch();

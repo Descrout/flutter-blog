@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/providers/auth_provider.dart';
+import 'package:flutter_blog/providers/list_provider.dart';
 import 'package:flutter_blog/providers/validation_provider.dart';
 import 'package:flutter_blog/utils/styles.dart';
 import 'package:flutter_blog/views/routes.dart';
@@ -75,6 +77,7 @@ class LoginForm extends StatelessWidget {
                   .read<AuthProvider>()
                   .login(validation.mail.data, validation.password.data);
               if (await _showMyDialog(context)) {
+                context.read<ListProvider<Article>>().refresh();
                 Navigator.of(context).pushReplacementNamed(Routes.Landing);
               }
             }),

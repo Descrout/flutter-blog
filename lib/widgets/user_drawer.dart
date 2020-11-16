@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/globals.dart';
+import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/providers/auth_provider.dart';
+import 'package:flutter_blog/providers/list_provider.dart';
 import 'package:flutter_blog/views/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +16,7 @@ class UserDrawer extends StatelessWidget {
         ListTile(
           onTap: () {
             context.read<AuthProvider>().logout();
+            context.read<ListProvider<Article>>().refresh();
             Navigator.of(context).pop();
           },
           leading: Icon(Icons.logout),

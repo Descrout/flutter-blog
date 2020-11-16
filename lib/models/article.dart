@@ -1,6 +1,17 @@
 import 'package:flutter_blog/models/user.dart';
 import 'package:flutter_blog/utils/time.dart';
 
+class FavResponse {
+  final bool favStatus;
+  final int favCount;
+
+  FavResponse({this.favCount, this.favStatus});
+
+  FavResponse.fromJson(Map<String, dynamic> parsed)
+      : favStatus = parsed['fav_status'],
+        favCount = parsed['fav_count'];
+}
+
 class Article {
   final int id;
   final String title;
@@ -10,6 +21,7 @@ class Article {
   final int commentCount;
   final int favoriteCount;
   final bool favoriteStatus;
+  final bool commentStatus;
   final User user;
 
   Article(
@@ -21,6 +33,7 @@ class Article {
       this.commentCount,
       this.favoriteCount,
       this.favoriteStatus,
+      this.commentStatus,
       this.user});
 
   Article.fromJson(Map<String, dynamic> parsed)
@@ -32,5 +45,6 @@ class Article {
         commentCount = parsed['comment_count'],
         favoriteCount = parsed['favorites'],
         favoriteStatus = parsed['fav_status'],
+        commentStatus = parsed['comment_status'],
         user = User.fromJson(parsed['user']);
 }

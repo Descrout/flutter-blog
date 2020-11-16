@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/models/article.dart';
+import 'package:flutter_blog/views/routes.dart';
 
 class ArticleItem extends StatelessWidget {
   final Article article;
@@ -9,7 +10,9 @@ class ArticleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, Routes.Article, arguments: article.id);
+      },
       contentPadding: EdgeInsets.symmetric(horizontal: 5.0),
       leading: leading(),
       title: Text(
@@ -31,9 +34,8 @@ class ArticleItem extends StatelessWidget {
         child: Row(
           children: [
             Icon(Icons.comment_rounded,
-                color: article.commentCount > 0
-                    ? Colors.blueAccent
-                    : Colors.black45),
+                color:
+                    article.commentStatus ? Colors.blueAccent : Colors.black45),
             Text('${article.commentCount} ')
           ],
         ),
@@ -89,25 +91,17 @@ class ArticleItem extends StatelessWidget {
 
   Widget subtitle() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [user(), info()],
+      children: [user(), favChip(), commentChip()],
     );
   }
 
   Widget user() {
     return SizedBox(
-      width: 100,
+      width: 80,
       child: Text(
         '@${article.user.name}',
         overflow: TextOverflow.ellipsis,
       ),
-    );
-  }
-
-  Widget info() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [favChip(), commentChip()],
     );
   }
 }

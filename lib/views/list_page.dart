@@ -159,7 +159,7 @@ class ListPage<T> extends StatelessWidget {
     return ListView.separated(
         itemBuilder: (ctx, i) {
           if (i < items.length) {
-            return builder(ctx, items.at(i));
+            return builder(ctx, items[i]);
           }
           items.extend();
           return Center(child: CircularProgressIndicator());
