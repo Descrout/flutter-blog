@@ -13,9 +13,15 @@ class ArticleProvider with ChangeNotifier {
     fetch();
   }
 
-  toggleFavorite() async {
-    favResponse = (await Blog.toggleFavorite(article.data.id)).data;
-    notifyListeners();
+  Future<String> toggleFavorite() async {
+    final response = await Blog.toggleFavorite(article.data.id);
+    if (response.success) {
+      favResponse = response.data;
+      notifyListeners();
+      return null;
+    } else {
+      return response.error;
+    }
   }
 
   Future<void> fetch() async {

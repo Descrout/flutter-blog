@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/providers/article_provider.dart';
+import 'package:flutter_blog/providers/comments_provider.dart';
 import 'package:flutter_blog/views/article_page.dart';
 import 'package:flutter_blog/views/landing_page.dart';
 import 'package:flutter_blog/views/login_page.dart';
 import 'package:flutter_blog/views/users_page.dart';
+import 'package:flutter_blog/views/comments_page.dart';
 import 'package:provider/provider.dart';
 
 abstract class Routes {
@@ -13,6 +15,7 @@ abstract class Routes {
   static const Users = '/users';
   static const Contact = '/contact';
   static const Article = '/article';
+  static const Comments = '/comments';
   static const User = '/user';
 
   static const KEYNAMES = [
@@ -34,6 +37,11 @@ abstract class Routes {
             return ChangeNotifierProvider(
               create: (ctx) => ArticleProvider(settings.arguments as int),
               child: ArticlePage(),
+            );
+          case Comments:
+            return ChangeNotifierProvider(
+              create: (ctx) => CommentsProvider(settings.arguments as int),
+              child: CommentsPage(),
             );
           default:
             return _routes[settings.name];

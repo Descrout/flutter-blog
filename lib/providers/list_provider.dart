@@ -26,7 +26,7 @@ class ListProvider<T> with ChangeNotifier {
 
   bool get filtered => _dateFiltered || _orderFiltered || _searchFiltered;
 
-  int get listLength => _items.length + (this.hasMore ? 1 : 0);
+  int get listLength => _items.length + (hasMore ? 1 : 0);
 
   bool get hasMore => _lastCount == _itemCapacity;
 
@@ -93,10 +93,9 @@ class ListProvider<T> with ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    this._lastCount = 0;
+    _lastCount = 0;
     _params.page = 1;
     _items.clear();
-    notifyListeners();
     await fetch();
   }
 
@@ -107,7 +106,7 @@ class ListProvider<T> with ChangeNotifier {
       return;
     }
 
-    this._lastCount = itemsResponse.data.length;
+    _lastCount = itemsResponse.data.length;
     _items.addAll(itemsResponse.data);
     notifyListeners();
   }

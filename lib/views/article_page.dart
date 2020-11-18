@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blog/globals.dart';
 import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/providers/article_provider.dart';
+import 'package:flutter_blog/views/routes.dart';
 import 'package:provider/provider.dart';
 
 const splashUrls = [
@@ -60,28 +62,32 @@ class ArticlePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-          onTap: (i) {
-            if (i == 0)
-              articleProvider.toggleFavorite();
-            else if (i == 1)
+          onTap: (i) async {
+            if (i == 0) {
+              final error = await articleProvider.toggleFavorite();
+              if (error != null) {
+                _showDialog(context, error);
+              }
+            } else if (i == 1)
               articleProvider.controller.animateTo(
                 0,
                 duration: Duration(milliseconds: 1500),
                 curve: Curves.fastOutSlowIn,
               );
             else
-              print("comments");
+              Navigator.pushNamed(context, Routes.Comments,
+                  arguments: article.data.id);
           },
           items: [
             BottomNavigationBarItem(
               icon: Selector<ArticleProvider, FavResponse>(
-                builder: (_, favResponse, __) => Icon(Icons.favorite,
+                builder: (context, favResponse, _) => Icon(Icons.favorite,
                     color:
                         favResponse.favStatus ? Colors.red : Colors.grey[700]),
                 selector: (_, ap) => ap.favResponse,
               ),
               title: Selector<ArticleProvider, FavResponse>(
-                builder: (_, favResponse, __) => Text(
+                builder: (context, favResponse, _) => Text(
                   '${favResponse.favCount}',
                   style: TextStyle(
                       color: favResponse.favStatus
@@ -98,6 +104,20 @@ class ArticlePage extends StatelessWidget {
                 title: Text('${article.data.commentCount}',
                     style: TextStyle(color: _commentColor))),
           ]),
+    );
+  }
+
+  Future<bool> _showDialog(BuildContext ctx, String error) async {
+    return showDialog<bool>(
+      context: ctx,
+      barrierDismissible: false, // user must tap button!
+      builder: (ctx) => AlertDialog(
+        title: Text("Cannot favorite !"),
+        content: Text(error),
+        actions: [
+          TextButton(onPressed: Navigator.of(ctx).pop, child: Text("OK")),
+        ],
+      ),
     );
   }
 }

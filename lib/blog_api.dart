@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'globals.dart';
 import 'models/article.dart';
+import 'models/comment.dart';
 import 'models/user.dart';
 
 abstract class Blog {
@@ -11,8 +12,33 @@ abstract class Blog {
       return Article.fromJson(json) as T;
     } else if (T == User) {
       return User.fromJson(json) as T;
+    } else if (T == Comment) {
+      return Comment.fromJson(json) as T;
     }
     throw "Invalid model type $T";
+  }
+
+  static Future<Item<Comment>> sendComment(int articleID, String msg) async {
+    try {
+      final uri = Uri.http(Globals.SERVER, '/api/comments/$articleID');
+      final res = await http.post(uri,
+          headers: {
+            'content-type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${Globals.shared.token}',
+          },
+          body: convert.jsonEncode({'body': msg}));
+
+      final parsed = convert.jsonDecode(res.body);
+      if (res.statusCode == 201) {
+        return Item(data: Comment.fromJson(parsed));
+      } else if (res.statusCode == 401) {
+        throw Exception('You must login to send a comment.');
+      }
+      throw Exception(parsed['error'] ?? 'Unknown error while commenting.');
+    } catch (e) {
+      return Item(error: e.toString().split(':')[1]);
+    }
   }
 
   static Future<Item<FavResponse>> toggleFavorite(int articleID) async {
@@ -26,11 +52,13 @@ abstract class Blog {
       final parsed = convert.jsonDecode(res.body);
       if (res.statusCode == 200) {
         return Item(data: FavResponse.fromJson(parsed));
+      } else if (res.statusCode == 401) {
+        throw Exception('You must login to favorite an article.');
       }
       throw Exception(
           parsed['error'] ?? 'Unknown error while favorite toggle.');
     } catch (e) {
-      return Item(error: e.toString());
+      return Item(error: e.toString().split(':')[1]);
     }
   }
 
