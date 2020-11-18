@@ -15,6 +15,7 @@ class ListPage<T> extends StatelessWidget {
   final Widget filter;
   final Tab tab;
   final String name;
+  final Widget fButton;
 
   ListPage({
     Key key,
@@ -22,6 +23,7 @@ class ListPage<T> extends StatelessWidget {
     @required this.filter,
     @required this.tab,
     @required this.name,
+    this.fButton,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class ListPage<T> extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        floatingActionButton: fButton,
         appBar: AppBar(
           title: const Text(Globals.TITLE),
           leading: Consumer<AuthProvider>(

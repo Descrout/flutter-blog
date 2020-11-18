@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blog/globals.dart';
 import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/providers/article_provider.dart';
 import 'package:flutter_blog/views/routes.dart';
@@ -64,7 +63,7 @@ class ArticlePage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
           onTap: (i) async {
             if (i == 0) {
-              final error = await articleProvider.toggleFavorite();
+              final error = await articleProvider.toggleFavorite(context);
               if (error != null) {
                 _showDialog(context, error);
               }

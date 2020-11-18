@@ -13,8 +13,11 @@ class ArticleProvider with ChangeNotifier {
     fetch();
   }
 
-  Future<String> toggleFavorite() async {
-    final response = await Blog.toggleFavorite(article.data.id);
+  Future<String> toggleFavorite(BuildContext ctx) async {
+    if (Globals.shared.token == null) {
+      return "You must login to favorite an article.";
+    }
+    final response = await Blog.toggleFavorite(ctx, article.data.id);
     if (response.success) {
       favResponse = response.data;
       notifyListeners();

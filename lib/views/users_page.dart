@@ -14,5 +14,6 @@ class UsersPage extends ListPage<User> {
           builder: (ctx, user) => UserItem(user),
           tab: Tab(text: "Users", icon: Icon(Icons.supervised_user_circle)),
           filter: ListFilter<User>(),
+          fButton: SizedBox.shrink(),
         );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/blog_api.dart';
+import 'package:flutter_blog/globals.dart';
 import 'package:flutter_blog/models/comment.dart';
 import 'package:flutter_blog/utils/query_params.dart';
 
@@ -36,14 +37,18 @@ class CommentsProvider with ChangeNotifier {
     await fetch();
   }
 
-  Future<void> sendComment(String msg) async {
+  Future<void> sendComment(BuildContext ctx, String msg) async {
     if (msg.length < 1) {
       sendError = "Can't be empty";
       notifyListeners();
       return;
+    } else if (Globals.shared.token == null) {
+      sendError = "You must login to send a comment.";
+      notifyListeners();
+      return;
     }
 
-    final comment = await Blog.sendComment(articleID, msg);
+    final comment = await Blog.sendComment(ctx, articleID, msg);
     controller.clear();
 
     if (comment.success) {

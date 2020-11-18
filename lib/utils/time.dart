@@ -44,6 +44,6 @@ class UnixTime {
       return '${since.inSeconds} seconds';
     }
 
-    return 'Less than a second';
+    return '1 second';
   }
 }

@@ -31,9 +31,9 @@ class CommentsPage extends StatelessWidget {
                 hintText: 'Comment',
                 labelText: 'Comment',
                 errorText: comments.sendError),
-            onFieldSubmitted:
+            onFieldSubmitted: (msg) =>
                 Provider.of<CommentsProvider>(context, listen: false)
-                    .sendComment,
+                    .sendComment(context, msg),
           ),
           SizedBox(height: 5),
           Expanded(

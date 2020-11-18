@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/providers/article_provider.dart';
 import 'package:flutter_blog/providers/comments_provider.dart';
 import 'package:flutter_blog/views/article_page.dart';
+import 'package:flutter_blog/views/create_article.dart';
 import 'package:flutter_blog/views/landing_page.dart';
 import 'package:flutter_blog/views/login_page.dart';
 import 'package:flutter_blog/views/users_page.dart';
@@ -17,6 +18,7 @@ abstract class Routes {
   static const Article = '/article';
   static const Comments = '/comments';
   static const User = '/user';
+  static const Create = '/create';
 
   static const KEYNAMES = [
     Routes.Landing,
@@ -28,6 +30,7 @@ abstract class Routes {
     Landing: LandingPage(),
     Users: UsersPage(),
     Login: LoginPage(),
+    Create: CreateArticle(),
   };
 
   static MaterialPageRoute generate(RouteSettings settings) =>
@@ -35,12 +38,12 @@ abstract class Routes {
         switch (settings.name) {
           case Article:
             return ChangeNotifierProvider(
-              create: (ctx) => ArticleProvider(settings.arguments as int),
+              create: (ctx) => ArticleProvider(settings.arguments),
               child: ArticlePage(),
             );
           case Comments:
             return ChangeNotifierProvider(
-              create: (ctx) => CommentsProvider(settings.arguments as int),
+              create: (ctx) => CommentsProvider(settings.arguments),
               child: CommentsPage(),
             );
           default:

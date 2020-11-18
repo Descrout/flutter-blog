@@ -20,14 +20,32 @@ class ValidationProvider with ChangeNotifier {
 
   Item<String> _rePassword = Item<String>();
 
+  Item<String> _title = Item<String>();
+  Item<String> get title => _title;
+
+  Item<String> _body = Item<String>();
+  Item<String> get body => _body;
+
   //Validation Shortcuts
-  void Function() isLoginValid(VoidCallback cb) =>
-      (_mail.success && _password.success ? cb : null);
+  void Function() isLoginValid(VoidCallback cb) {
+    return _mail.success && _password.success ? cb : null;
+  }
+
   bool get isRegisterValid =>
       _name.success &&
       _mail.success &&
       _password.success &&
       _rePassword.success;
+
+  void Function() isArticleValid(VoidCallback cb) {
+    return _title.success && _body.success ? cb : null;
+  }
+
+  void clearArticleCreation() {
+    _title = Item();
+    _body = Item();
+    notifyListeners();
+  }
 
   //Validation Checks
   void checkName(String value) {
@@ -62,6 +80,24 @@ class ValidationProvider with ChangeNotifier {
       _rePassword = Item(data: value);
     } else {
       _rePassword = Item(error: "Passwords don't match.");
+    }
+    notifyListeners();
+  }
+
+  void checkTitle(String title) {
+    if (title.trimLeft().trimRight().length > 10) {
+      _title = Item(data: title);
+    } else {
+      _title = Item(error: "Title must be atleast 10 character.");
+    }
+    notifyListeners();
+  }
+
+  void checkBody(String body) {
+    if (body.trimLeft().trimRight().length > 20) {
+      _body = Item(data: body);
+    } else {
+      _body = Item(error: "Body must be atleast 20 character.");
     }
     notifyListeners();
   }

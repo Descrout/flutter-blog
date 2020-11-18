@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_blog/providers/auth_provider.dart';
 import 'package:flutter_blog/utils/query_params.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'dart:convert' as convert;
 import 'globals.dart';
 import 'models/article.dart';
@@ -18,7 +21,31 @@ abstract class Blog {
     throw "Invalid model type $T";
   }
 
-  static Future<Item<Comment>> sendComment(int articleID, String msg) async {
+  static Future<Item<int>> postArticle(String title, String body) async {
+    try {
+      final uri = Uri.http(Globals.SERVER, '/api/articles');
+      final res = await http.post(uri,
+          headers: {
+            'content-type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${Globals.shared.token}',
+          },
+          body: convert.jsonEncode({'title': title, 'body': body}));
+
+      final parsed = convert.jsonDecode(res.body);
+
+      if (res.statusCode == 201) {
+        return Item<int>(data: parsed['id']);
+      }
+      throw Exception(
+          parsed['error'] ?? 'Unknown error while posting article.');
+    } catch (e) {
+      return Item(error: e.toString().split(':')[1]);
+    }
+  }
+
+  static Future<Item<Comment>> sendComment(
+      BuildContext ctx, int articleID, String msg) async {
     try {
       final uri = Uri.http(Globals.SERVER, '/api/comments/$articleID');
       final res = await http.post(uri,
@@ -33,7 +60,8 @@ abstract class Blog {
       if (res.statusCode == 201) {
         return Item(data: Comment.fromJson(parsed));
       } else if (res.statusCode == 401) {
-        throw Exception('You must login to send a comment.');
+        Provider.of<AuthProvider>(ctx, listen: false).logout();
+        throw Exception('Your session is expired, please login again.');
       }
       throw Exception(parsed['error'] ?? 'Unknown error while commenting.');
     } catch (e) {
@@ -41,7 +69,8 @@ abstract class Blog {
     }
   }
 
-  static Future<Item<FavResponse>> toggleFavorite(int articleID) async {
+  static Future<Item<FavResponse>> toggleFavorite(
+      BuildContext ctx, int articleID) async {
     try {
       final uri = Uri.http(Globals.SERVER, '/api/articles/$articleID');
       final res = await http.post(uri, headers: {
@@ -53,7 +82,8 @@ abstract class Blog {
       if (res.statusCode == 200) {
         return Item(data: FavResponse.fromJson(parsed));
       } else if (res.statusCode == 401) {
-        throw Exception('You must login to favorite an article.');
+        Provider.of<AuthProvider>(ctx, listen: false).logout();
+        throw Exception('Your session is expired, please login again.');
       }
       throw Exception(
           parsed['error'] ?? 'Unknown error while favorite toggle.');
@@ -124,7 +154,7 @@ abstract class Blog {
       }
       throw Exception(parsed['error'] ?? 'Unknown error while login.');
     } catch (e) {
-      return Item(error: e.toString());
+      return Item(error: e.toString().split(':')[1]);
     }
   }
 }

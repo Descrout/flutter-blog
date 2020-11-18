@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/blog_api.dart';
-import 'package:flutter_blog/globals.dart';
+import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/utils/query_params.dart';
 
 class ListProvider<T> with ChangeNotifier {
@@ -10,13 +10,12 @@ class ListProvider<T> with ChangeNotifier {
   List<T> _items = List<T>();
   int _lastCount;
   QueryParams _params = QueryParams();
-  bool _dateFiltered = false;
   bool _orderFiltered = false;
   bool _searchFiltered = false;
 
   ListProvider(this._endpoint, this._itemCapacity);
 
-  bool get dateFiltered => _dateFiltered;
+  bool get dateFiltered => _params.dateFiltered;
   bool get orderFiltered => _orderFiltered;
   bool get searchFiltered => _searchFiltered;
   String get search => _params.search;
@@ -24,7 +23,8 @@ class ListProvider<T> with ChangeNotifier {
   bool get isEmpty => _items.isEmpty;
   QueryParams get params => _params;
 
-  bool get filtered => _dateFiltered || _orderFiltered || _searchFiltered;
+  bool get filtered =>
+      _params.dateFiltered || _orderFiltered || _searchFiltered;
 
   int get listLength => _items.length + (hasMore ? 1 : 0);
 
@@ -43,7 +43,6 @@ class ListProvider<T> with ChangeNotifier {
 
   clearDateFilters() async {
     _params.clearDates();
-    _dateFiltered = false;
     await refresh();
   }
 
@@ -55,7 +54,6 @@ class ListProvider<T> with ChangeNotifier {
 
   clearFilters() async {
     _params.clearFilters();
-    _dateFiltered = false;
     _orderFiltered = false;
     _searchFiltered = false;
     await refresh();
@@ -76,7 +74,7 @@ class ListProvider<T> with ChangeNotifier {
       if (_params.to == date) return;
       _params.to = date;
     }
-    _dateFiltered = true;
+    _params.dateFiltered = true;
     await refresh();
   }
 
@@ -96,7 +94,7 @@ class ListProvider<T> with ChangeNotifier {
     _lastCount = 0;
     _params.page = 1;
     _items.clear();
-    await fetch();
+    return fetch();
   }
 
   Future<void> fetch() async {
@@ -105,7 +103,6 @@ class ListProvider<T> with ChangeNotifier {
       print('Error while adding page to list : ${itemsResponse.error}');
       return;
     }
-
     _lastCount = itemsResponse.data.length;
     _items.addAll(itemsResponse.data);
     notifyListeners();

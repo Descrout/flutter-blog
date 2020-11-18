@@ -35,8 +35,6 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //These two rebuilds the whole page but the page is light,
-    //so I won't wrap widgets with Consumer<T> for now.
     final validation = Provider.of<ValidationProvider>(context);
     return SingleChildScrollView(
       child: Column(
@@ -50,6 +48,7 @@ class LoginForm extends StatelessWidget {
           ),
           SizedBox(height: 40.0),
           TextFormField(
+            initialValue: validation.mail.data,
             keyboardType: TextInputType.emailAddress,
             onChanged: validation.checkMail,
             decoration: Styles.input.copyWith(
@@ -59,6 +58,7 @@ class LoginForm extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
           TextFormField(
+            initialValue: validation.password.data,
             obscureText: true,
             onChanged: validation.checkPassword,
             decoration: Styles.input.copyWith(

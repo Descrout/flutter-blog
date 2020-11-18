@@ -6,6 +6,7 @@ class QueryParams {
   SortType sort = SortType.NEW;
   DateTime from = DateTime(2020);
   DateTime to = DateTime.now();
+  bool dateFiltered = false;
 
   int get fromUnix => from.toUtc().millisecondsSinceEpoch ~/ 1000;
   int get toUnix => to.toUtc().millisecondsSinceEpoch ~/ 1000;
@@ -17,6 +18,7 @@ class QueryParams {
   clearDates() {
     from = DateTime(2020);
     to = DateTime.now();
+    dateFiltered = false;
   }
 
   clearOrder() {
@@ -31,17 +33,17 @@ class QueryParams {
   }
 
   Map<String, String> getAll() {
-    var params = {"page": this.page.toString()};
+    var params = {"page": page.toString()};
 
-    if (this.search != "") {
-      params["search"] = this.search;
+    if (search != "") {
+      params["search"] = search;
     }
 
-    if (this.toUnix > 0) {
+    if (dateFiltered) {
       params["date"] = "$fromUnix|$toUnix";
     }
 
-    switch (this.sort) {
+    switch (sort) {
       case SortType.POPULAR:
         params["sort"] = "popular";
         break;
