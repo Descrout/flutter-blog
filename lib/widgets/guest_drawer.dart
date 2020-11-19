@@ -16,7 +16,9 @@ class GuestDrawer extends StatelessWidget {
           title: Text('Login'),
         ),
         ListTile(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, Routes.Register);
+          },
           leading: Icon(Icons.app_registration),
           title: Text('Register'),
         ),

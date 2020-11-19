@@ -42,7 +42,7 @@ class LoginForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Articler',
+            'Flutter Blog App',
             textAlign: TextAlign.center,
             style: Styles.h1,
           ),
@@ -68,15 +68,17 @@ class LoginForm extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
           RaisedButton(
+            color: Colors.indigo,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 22.0),
-              child: Text('Log In'),
+              child: Text('Log In', style: TextStyle(color: Colors.white)),
             ),
             onPressed: validation.isLoginValid(() async {
               context
                   .read<AuthProvider>()
                   .login(validation.mail.data, validation.password.data);
               if (await _showMyDialog(context)) {
+                validation.clearLogin();
                 context.read<ListProvider<Article>>().refresh();
                 Navigator.of(context).pushReplacementNamed(Routes.Landing);
               }

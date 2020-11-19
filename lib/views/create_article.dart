@@ -69,8 +69,7 @@ class CreateArticle extends StatelessWidget {
                     );
                   } else {
                     validation.clearArticleCreation();
-                    Provider.of<ListProvider<Article>>(context, listen: false)
-                        .refresh();
+                    context.read<ListProvider<Article>>().refresh();
                     Navigator.of(context).pushReplacementNamed(Routes.Article,
                         arguments: article.data);
                   }

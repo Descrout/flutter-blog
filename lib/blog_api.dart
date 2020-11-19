@@ -157,4 +157,28 @@ abstract class Blog {
       return Item(error: e.toString().split(':')[1]);
     }
   }
+
+  static Future<String> register(
+      String name, String email, String password) async {
+    try {
+      final uri = Uri.http(Globals.SERVER, '/register');
+      final res = await http.post(uri,
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: convert.jsonEncode({
+            'name': name,
+            'email': email,
+            'password': password,
+          }));
+
+      final parsed = convert.jsonDecode(res.body);
+      if (res.statusCode == 201) {
+        return null;
+      }
+      throw Exception(parsed['error'] ?? 'Unknown error while register.');
+    } catch (e) {
+      return e.toString().split(':')[1];
+    }
+  }
 }

@@ -24,7 +24,7 @@ class LandingPage extends ListPage<Article> {
                     context: ctx,
                     barrierDismissible: false,
                     builder: (ctx) => AlertDialog(
-                      title: Text("Cannot write and article !"),
+                      title: Text("Cannot write an article !"),
                       content: Text("You must login to write an article."),
                       actions: [
                         TextButton(

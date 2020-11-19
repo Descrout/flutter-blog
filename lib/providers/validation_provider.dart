@@ -19,6 +19,7 @@ class ValidationProvider with ChangeNotifier {
   Item<String> get password => _password;
 
   Item<String> _rePassword = Item<String>();
+  Item<String> get rePassword => _rePassword;
 
   Item<String> _title = Item<String>();
   Item<String> get title => _title;
@@ -27,18 +28,28 @@ class ValidationProvider with ChangeNotifier {
   Item<String> get body => _body;
 
   //Validation Shortcuts
-  void Function() isLoginValid(VoidCallback cb) {
-    return _mail.success && _password.success ? cb : null;
+  void Function() isLoginValid(VoidCallback cb) =>
+      _mail.success && _password.success ? cb : null;
+
+  void Function() isRegisterValid(VoidCallback cb) =>
+      _name.success && _mail.success && _password.success && _rePassword.success
+          ? cb
+          : null;
+
+  void Function() isArticleValid(VoidCallback cb) =>
+      _title.success && _body.success ? cb : null;
+
+  void clearRegister() {
+    _name = Item();
+    _password = Item();
+    _rePassword = Item();
+    notifyListeners();
   }
 
-  bool get isRegisterValid =>
-      _name.success &&
-      _mail.success &&
-      _password.success &&
-      _rePassword.success;
-
-  void Function() isArticleValid(VoidCallback cb) {
-    return _title.success && _body.success ? cb : null;
+  void clearLogin() {
+    _mail = Item();
+    _password = Item();
+    notifyListeners();
   }
 
   void clearArticleCreation() {

@@ -6,6 +6,7 @@ import 'package:flutter_blog/views/article_page.dart';
 import 'package:flutter_blog/views/create_article.dart';
 import 'package:flutter_blog/views/landing_page.dart';
 import 'package:flutter_blog/views/login_page.dart';
+import 'package:flutter_blog/views/register_page.dart';
 import 'package:flutter_blog/views/users_page.dart';
 import 'package:flutter_blog/views/comments_page.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 abstract class Routes {
   static const Landing = '/';
   static const Login = '/login';
+  static const Register = '/register';
   static const Users = '/users';
   static const Contact = '/contact';
   static const Article = '/article';
@@ -30,6 +32,7 @@ abstract class Routes {
     Landing: LandingPage(),
     Users: UsersPage(),
     Login: LoginPage(),
+    Register: RegisterPage(),
     Create: CreateArticle(),
   };
 
