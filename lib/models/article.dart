@@ -22,7 +22,7 @@ class Article {
   final int favoriteCount;
   final bool favoriteStatus;
   final bool commentStatus;
-  final User user;
+  User user;
 
   Article(
       {this.id,
@@ -46,5 +46,6 @@ class Article {
         favoriteCount = parsed['favorites'],
         favoriteStatus = parsed['fav_status'],
         commentStatus = parsed['comment_status'],
-        user = User.fromJson(parsed['user']);
+        user =
+            parsed.containsKey('user') ? User.fromJson(parsed['user']) : null;
 }

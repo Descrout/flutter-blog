@@ -6,7 +6,7 @@ class Comment {
   final String body;
   final UnixTime createdAt;
   final UnixTime updatedAt;
-  final User user;
+  User user;
 
   Comment({this.id, this.body, this.createdAt, this.updatedAt, this.user});
 
@@ -15,5 +15,6 @@ class Comment {
         body = parsed['body'],
         createdAt = UnixTime(parsed['created_at']),
         updatedAt = UnixTime(parsed['updated_at']),
-        user = User.fromJson(parsed['user']);
+        user =
+            parsed.containsKey('user') ? User.fromJson(parsed['user']) : null;
 }

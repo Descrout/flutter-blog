@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/providers/article_provider.dart';
 import 'package:flutter_blog/providers/comments_provider.dart';
+import 'package:flutter_blog/providers/user_provider.dart';
 import 'package:flutter_blog/views/article_page.dart';
 import 'package:flutter_blog/views/create_article.dart';
 import 'package:flutter_blog/views/landing_page.dart';
 import 'package:flutter_blog/views/login_page.dart';
 import 'package:flutter_blog/views/register_page.dart';
+import 'package:flutter_blog/views/user_page.dart';
 import 'package:flutter_blog/views/users_page.dart';
 import 'package:flutter_blog/views/comments_page.dart';
 import 'package:provider/provider.dart';
@@ -16,10 +18,10 @@ abstract class Routes {
   static const Login = '/login';
   static const Register = '/register';
   static const Users = '/users';
+  static const User = '/user';
   static const Contact = '/contact';
   static const Article = '/article';
   static const Comments = '/comments';
-  static const User = '/user';
   static const Create = '/create';
 
   static const KEYNAMES = [
@@ -48,6 +50,11 @@ abstract class Routes {
             return ChangeNotifierProvider(
               create: (ctx) => CommentsProvider(settings.arguments),
               child: CommentsPage(),
+            );
+          case User:
+            return ChangeNotifierProvider(
+              create: (ctx) => UserProvider(settings.arguments),
+              child: UserPage(),
             );
           default:
             return _routes[settings.name];

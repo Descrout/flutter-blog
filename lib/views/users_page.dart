@@ -11,7 +11,7 @@ class UsersPage extends ListPage<User> {
       : super(
           key: key,
           name: Routes.Users,
-          builder: (ctx, user) => UserItem(user),
+          builder: (user) => UserItem(user),
           tab: Tab(text: "Users", icon: Icon(Icons.supervised_user_circle)),
           filter: ListFilter<User>(),
           fButton: SizedBox.shrink(),

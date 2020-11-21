@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class ListPage<T> extends StatelessWidget {
   final _controller = ScrollController();
-  final Widget Function(BuildContext, T) builder;
+  final Widget Function(T) builder;
   final Widget filter;
   final Tab tab;
   final String name;
@@ -102,8 +102,8 @@ class ListPage<T> extends StatelessWidget {
           },
           body: TabBarView(children: [
             Consumer<ListProvider<T>>(
-              builder: (_, items, __) => RefreshIndicator(
-                child: (items.isEmpty
+              builder: (_, listProvider, __) => RefreshIndicator(
+                child: (listProvider.items.isEmpty
                     ? ListView(
                         children: [
                           SizedBox(height: 50),
@@ -120,8 +120,8 @@ class ListPage<T> extends StatelessWidget {
                           )),
                         ],
                       )
-                    : _buildItems(context, items)),
-                onRefresh: items.refresh,
+                    : _buildItems(listProvider)),
+                onRefresh: listProvider.refresh,
               ),
             ),
             filter,
@@ -158,16 +158,16 @@ class ListPage<T> extends StatelessWidget {
     );
   }
 
-  Widget _buildItems(BuildContext ctx, ListProvider<T> items) {
+  Widget _buildItems(ListProvider<T> listProvider) {
     return ListView.separated(
         itemBuilder: (ctx, i) {
-          if (i < items.length) {
-            return builder(ctx, items[i]);
+          if (i < listProvider.items.length) {
+            return builder(listProvider.items[i]);
           }
-          items.extend();
+          listProvider.fetch();
           return Center(child: CircularProgressIndicator());
         },
         separatorBuilder: (ctx, i) => Divider(),
-        itemCount: items.listLength);
+        itemCount: listProvider.items.listLength);
   }
 }

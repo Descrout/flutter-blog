@@ -48,7 +48,7 @@ class CommentsPage extends StatelessWidget {
   }
 
   Widget _buildItems(CommentsProvider comments) {
-    if (comments.isEmpty) {
+    if (comments.items.isEmpty) {
       return ListView(
         children: [
           SizedBox(height: 50),
@@ -66,13 +66,13 @@ class CommentsPage extends StatelessWidget {
     }
     return ListView.separated(
         itemBuilder: (ctx, i) {
-          if (i < comments.length) {
-            return CommentItem(comments[i]);
+          if (i < comments.items.length) {
+            return CommentItem(comments.items[i]);
           }
-          comments.extend();
+          comments.fetch();
           return Center(child: CircularProgressIndicator());
         },
         separatorBuilder: (ctx, i) => Divider(),
-        itemCount: comments.listLength);
+        itemCount: comments.items.listLength);
   }
 }

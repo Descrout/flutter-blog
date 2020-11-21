@@ -14,8 +14,8 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  final articleProvider = ListProvider<Article>("/api/articles", 10);
-  final userProvider = ListProvider<User>("/api/users", 10);
+  final articleProvider = ListProvider<Article>("/api/articles");
+  final userProvider = ListProvider<User>("/api/users");
 
   @override
   Widget build(BuildContext context) {

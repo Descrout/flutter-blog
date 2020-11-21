@@ -1,39 +1,28 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/blog_api.dart';
-import 'package:flutter_blog/models/article.dart';
+import 'package:flutter_blog/utils/list_holder.dart';
 import 'package:flutter_blog/utils/query_params.dart';
 
 class ListProvider<T> with ChangeNotifier {
-  final int _itemCapacity;
   final String _endpoint;
-
-  List<T> _items = List<T>();
-  int _lastCount;
   QueryParams _params = QueryParams();
+  ListHolder<T> items = ListHolder();
   bool _orderFiltered = false;
   bool _searchFiltered = false;
 
-  ListProvider(this._endpoint, this._itemCapacity);
+  ListProvider(this._endpoint);
 
   bool get dateFiltered => _params.dateFiltered;
   bool get orderFiltered => _orderFiltered;
   bool get searchFiltered => _searchFiltered;
   String get search => _params.search;
-  int get length => _items.length;
-  bool get isEmpty => _items.isEmpty;
   QueryParams get params => _params;
 
   bool get filtered =>
       _params.dateFiltered || _orderFiltered || _searchFiltered;
 
-  int get listLength => _items.length + (hasMore ? 1 : 0);
-
-  bool get hasMore => _lastCount == _itemCapacity;
-
   List<bool> get selectedOrder =>
       SortType.values.map((e) => _params.sort == e).toList();
-
-  T operator [](int i) => _items[i];
 
   clearSearchFilters() async {
     _params.clearSearch();
@@ -85,26 +74,19 @@ class ListProvider<T> with ChangeNotifier {
     await refresh();
   }
 
-  extend() async {
-    _params.page += 1;
-    await fetch();
-  }
-
   Future<void> refresh() async {
-    _lastCount = 0;
-    _params.page = 1;
-    _items.clear();
+    items.clear();
     return fetch();
   }
 
   Future<void> fetch() async {
-    final itemsResponse = await Blog.getList<T>(_endpoint, _params);
+    final itemsResponse =
+        await Blog.getList<T>(_endpoint, _params..page = items.page);
     if (!itemsResponse.success) {
       print('Error while adding page to list : ${itemsResponse.error}');
       return;
     }
-    _lastCount = itemsResponse.data.length;
-    _items.addAll(itemsResponse.data);
+    items.extend(itemsResponse.data);
     notifyListeners();
   }
 }

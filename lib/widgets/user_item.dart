@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog/models/role.dart';
 import 'package:flutter_blog/models/user.dart';
+import 'package:flutter_blog/views/routes.dart';
 
 class UserItem extends StatelessWidget {
   final User user;
@@ -10,7 +10,9 @@ class UserItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, Routes.User, arguments: user.id);
+      },
       contentPadding: EdgeInsets.symmetric(horizontal: 5.0),
       leading: leading(),
       title: Text.rich(TextSpan(text: user.name, children: [

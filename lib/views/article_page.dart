@@ -25,7 +25,6 @@ class ArticlePage extends StatelessWidget {
     if (article == null) {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     } else if (!article.success) {
-      //maybe add information modal here to inform user about article error
       Navigator.of(context).pop();
       return SizedBox.shrink();
     }

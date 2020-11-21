@@ -39,6 +39,7 @@ class ValidationProvider with ChangeNotifier {
   void Function() isArticleValid(VoidCallback cb) =>
       _title.success && _body.success ? cb : null;
 
+  // Validation cleanup
   void clearRegister() {
     _name = Item();
     _password = Item();

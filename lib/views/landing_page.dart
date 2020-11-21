@@ -12,7 +12,7 @@ class LandingPage extends ListPage<Article> {
       : super(
           key: key,
           name: Routes.Landing,
-          builder: (ctx, article) => ArticleItem(article),
+          builder: (article) => ArticleItem(article),
           tab: Tab(text: "Articles", icon: Icon(Icons.article)),
           filter: ListFilter<Article>(),
           fButton: Builder(builder: (ctx) {
