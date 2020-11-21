@@ -44,7 +44,7 @@ class RegisterForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Flutter Blog App',
+            'Blog Register',
             textAlign: TextAlign.center,
             style: Styles.h1,
           ),
@@ -114,7 +114,15 @@ class RegisterForm extends StatelessWidget {
               }
             }),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 15.0),
+          InkWell(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, Routes.Login);
+            },
+            child: Text("Already have an account.",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.blueAccent)),
+          )
         ],
       ),
     );

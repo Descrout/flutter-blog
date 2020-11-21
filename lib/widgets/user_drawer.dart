@@ -15,6 +15,14 @@ class UserDrawer extends StatelessWidget {
         header(),
         ListTile(
           onTap: () {
+            Navigator.pushNamed(context, Routes.User,
+                arguments: Globals.shared.user.id);
+          },
+          leading: Icon(Icons.person),
+          title: Text('Profile'),
+        ),
+        ListTile(
+          onTap: () {
             context.read<AuthProvider>().logout();
             context.read<ListProvider<Article>>().refresh();
             Navigator.of(context).pop();

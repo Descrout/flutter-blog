@@ -9,16 +9,6 @@ class Styles {
     height: 22 / 18,
   );
 
-  static final p = defaultStyle.copyWith(
-    fontSize: 16.0,
-  );
-
-  static final error = defaultStyle.copyWith(
-    fontWeight: FontWeight.w500,
-    fontSize: 14.0,
-    color: Colors.red,
-  );
-
   static final input = InputDecoration(
     fillColor: Colors.white,
     focusColor: Colors.grey[900],

@@ -42,7 +42,7 @@ class LoginForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Flutter Blog App',
+            'Blog Login',
             textAlign: TextAlign.center,
             style: Styles.h1,
           ),
@@ -84,7 +84,15 @@ class LoginForm extends StatelessWidget {
               }
             }),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 15.0),
+          InkWell(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, Routes.Register);
+            },
+            child: Text("Create an account.",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.blueAccent)),
+          ),
         ],
       ),
     );

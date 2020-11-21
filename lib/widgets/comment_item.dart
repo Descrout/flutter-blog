@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/models/comment.dart';
+import 'package:flutter_blog/views/routes.dart';
 
 class CommentItem extends StatelessWidget {
   final Comment comment;
-
-  const CommentItem(this.comment);
+  final bool link;
+  const CommentItem(this.comment, this.link);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        if (link)
+          Navigator.pushNamed(context, Routes.User, arguments: comment.user.id);
+      },
       leading: leading(comment.user.getImageURL),
       title: Text.rich(
         TextSpan(

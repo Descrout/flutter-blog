@@ -142,7 +142,7 @@ class UserPage extends StatelessWidget {
           child: ListView.separated(
             itemBuilder: (ctx, i) {
               if (i < comments.length) {
-                return CommentItem(comments[i]);
+                return CommentItem(comments[i], false);
               }
               Provider.of<UserProvider>(context, listen: false).fetchComments();
               return Center(child: CircularProgressIndicator());

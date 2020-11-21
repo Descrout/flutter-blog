@@ -134,9 +134,15 @@ class ArticleReadingPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '@${article.user.name}',
-                style: Theme.of(context).textTheme.caption,
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.User,
+                      arguments: article.user.id);
+                },
+                child: Text(
+                  '@${article.user.name}',
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ),
               Text(
                 article.createdAt.toString(),
