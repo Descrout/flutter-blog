@@ -4,7 +4,7 @@ import 'package:flutter_blog/providers/article_provider.dart';
 import 'package:flutter_blog/providers/comments_provider.dart';
 import 'package:flutter_blog/providers/user_provider.dart';
 import 'package:flutter_blog/views/article_page.dart';
-import 'package:flutter_blog/views/create_article.dart';
+import 'package:flutter_blog/views/update_article.dart';
 import 'package:flutter_blog/views/landing_page.dart';
 import 'package:flutter_blog/views/login_page.dart';
 import 'package:flutter_blog/views/register_page.dart';
@@ -22,7 +22,7 @@ abstract class Routes {
   static const Contact = '/contact';
   static const Article = '/article';
   static const Comments = '/comments';
-  static const Create = '/create';
+  static const Update = '/update';
 
   static const KEYNAMES = [
     Routes.Landing,
@@ -35,7 +35,6 @@ abstract class Routes {
     Users: UsersPage(),
     Login: LoginPage(),
     Register: RegisterPage(),
-    Create: CreateArticle(),
   };
 
   static MaterialPageRoute generate(RouteSettings settings) =>
@@ -56,6 +55,9 @@ abstract class Routes {
               create: (ctx) => UserProvider(settings.arguments),
               child: UserPage(),
             );
+          case Update:
+            return UpdateArticle(update: settings.arguments);
+
           default:
             return _routes[settings.name];
         }

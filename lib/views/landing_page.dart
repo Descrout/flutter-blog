@@ -34,7 +34,7 @@ class LandingPage extends ListPage<Article> {
                     ),
                   );
                 } else
-                  Navigator.of(ctx).pushNamed(Routes.Create);
+                  Navigator.of(ctx).pushNamed(Routes.Update);
               },
             );
           }),

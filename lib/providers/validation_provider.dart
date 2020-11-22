@@ -96,6 +96,11 @@ class ValidationProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void initArticle(String title, String body) {
+    _title = Item(data: title);
+    _body = Item(data: body);
+  }
+
   void checkTitle(String title) {
     if (title.trimLeft().trimRight().length > 10) {
       _title = Item(data: title);

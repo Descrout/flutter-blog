@@ -1,4 +1,5 @@
 import 'package:flutter_blog/globals.dart';
+import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/models/role.dart';
 import 'package:flutter_blog/utils/time.dart';
 

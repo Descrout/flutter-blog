@@ -8,20 +8,34 @@ import 'package:flutter_blog/utils/styles.dart';
 import 'package:flutter_blog/views/routes.dart';
 import 'package:provider/provider.dart';
 
-class CreateArticle extends StatelessWidget {
-  const CreateArticle({Key key}) : super(key: key);
+class UpdateArticle extends StatelessWidget {
+  final Article update;
+  const UpdateArticle({Key key, this.update}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final validation = Provider.of<ValidationProvider>(context);
+
+    String buttonText = 'Post';
+    String title = 'Create an Article';
+    String initTitle = validation.title.data;
+    String initBody = validation.body.data;
+
+    if (update != null) {
+      title = 'Update the Article';
+      initTitle = update.title;
+      initBody = update.body;
+      buttonText = 'Update';
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text('Create an Article')),
+      appBar: AppBar(title: Text(title)),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(height: 5),
             TextFormField(
-              initialValue: validation.title.data,
+              initialValue: initTitle,
               onChanged: validation.checkTitle,
               decoration: Styles.input.copyWith(
                   hintText: 'Title',
@@ -30,7 +44,7 @@ class CreateArticle extends StatelessWidget {
             ),
             SizedBox(height: 5),
             TextFormField(
-              initialValue: validation.body.data,
+              initialValue: initBody,
               keyboardType: TextInputType.multiline,
               onChanged: validation.checkBody,
               minLines: 15,
@@ -46,19 +60,23 @@ class CreateArticle extends StatelessWidget {
               width: double.infinity,
               child: RaisedButton(
                 child: Text(
-                  'Post',
+                  buttonText,
                   style: TextStyle(color: Colors.white),
                 ),
                 color: Colors.indigo,
                 onPressed: validation.isArticleValid(() async {
-                  final article = await _postArticle(
-                      context, validation.title.data, validation.body.data);
+                  print(validation.title.data);
+                  final article = update != null
+                      ? await _editArticle(
+                          context, validation.title.data, validation.body.data)
+                      : await _postArticle(
+                          context, validation.title.data, validation.body.data);
                   if (article.error != null) {
                     showDialog<bool>(
                       context: context,
                       barrierDismissible: false,
                       builder: (ctx) => AlertDialog(
-                        title: Text("Cannot post article !"),
+                        title: Text("Article Error !"),
                         content: Text(article.error),
                         actions: [
                           TextButton(
@@ -79,6 +97,23 @@ class CreateArticle extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<Item<int>> _editArticle(
+      BuildContext ctx, String title, String body) async {
+    return showDialog<Item<int>>(
+      context: ctx,
+      barrierDismissible: false,
+      builder: (ctx) {
+        (ctx) async {
+          Navigator.of(ctx).pop(await Blog.editArticle(update.id, title, body));
+        }(ctx);
+        return AlertDialog(
+          title: Text("Updating article..."),
+          content: Center(child: CircularProgressIndicator()),
+        );
+      },
     );
   }
 

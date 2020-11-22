@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog/blog_api.dart';
+import 'package:flutter_blog/globals.dart';
 import 'package:flutter_blog/models/article.dart';
+import 'package:flutter_blog/providers/list_provider.dart';
+import 'package:flutter_blog/providers/validation_provider.dart';
 import 'package:flutter_blog/views/routes.dart';
+import 'package:flutter_blog/widgets/edit_item.dart';
+import 'package:provider/provider.dart';
 
 class ArticleItem extends StatelessWidget {
   final Article article;
@@ -22,7 +28,7 @@ class ArticleItem extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: subtitle(),
-      trailing: date(),
+      trailing: date(context),
     );
   }
 
@@ -60,11 +66,31 @@ class ArticleItem extends StatelessWidget {
     );
   }
 
-  Widget date() {
-    return Text(
-      '·${article.createdAt.passedSinceStr()}', //${article.createdAt.toString()}\n
-      style: TextStyle(fontSize: 11),
-      textAlign: TextAlign.center,
+  Widget date(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          '·${article.createdAt.passedSinceStr()}', //${article.createdAt.toString()}\n
+          style: TextStyle(fontSize: 11),
+          textAlign: TextAlign.center,
+        ),
+        Globals.shared.canManageArticle(article)
+            ? EditItem<Article>(
+                what: 'Article',
+                endpoint: '/api/articles/${article.id}',
+                onUpdate: (articleResponse) async {
+                  Provider.of<ValidationProvider>(context, listen: false)
+                      .initArticle(articleResponse.title, articleResponse.body);
+                  Navigator.of(context).pushNamed(
+                    Routes.Update,
+                    arguments: articleResponse,
+                  );
+                },
+                onRemoveSuccess:
+                    Provider.of<ListProvider<Article>>(context).refresh,
+              )
+            : SizedBox.shrink(),
+      ],
     );
   }
 

@@ -70,6 +70,30 @@ abstract class Blog {
     }
   }
 
+  static Future<Item<int>> editArticle(
+      int id, String title, String body) async {
+    try {
+      final uri = Uri.http(Globals.SERVER, '/api/articles/$id');
+      final res = await http.put(uri,
+          headers: {
+            'content-type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${Globals.shared.token}',
+          },
+          body: convert.jsonEncode({'title': title, 'body': body}));
+
+      final parsed = convert.jsonDecode(res.body);
+
+      if (res.statusCode == 200) {
+        return Item<int>(data: parsed['id']);
+      }
+      throw Exception(
+          parsed['error'] ?? 'Unknown error while editing article.');
+    } catch (e) {
+      return Item(error: e.toString());
+    }
+  }
+
   static Future<Item<User>> changeName(String name) async {
     try {
       final id = Globals.shared.user.id;
@@ -183,6 +207,25 @@ abstract class Blog {
           parsed['error'] ?? 'Unknown error while favorite toggle.');
     } catch (e) {
       return Item(error: e.toString().split(':')[1]);
+    }
+  }
+
+  static Future<String> deleteSingle(String endpoint) async {
+    try {
+      final uri = Uri.http(Globals.SERVER, endpoint);
+      final res = await http.delete(uri, headers: {
+        'Authorization': 'Bearer ${Globals.shared.token}',
+      });
+
+      final parsed = convert.jsonDecode(res.body);
+
+      if (res.statusCode == 200) {
+        return null;
+      }
+      throw Exception(
+          parsed['error'] ?? 'Unknown error while deleting $endpoint');
+    } catch (e) {
+      return e.toString();
     }
   }
 

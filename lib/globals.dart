@@ -1,3 +1,5 @@
+import 'package:flutter_blog/models/article.dart';
+import 'package:flutter_blog/models/comment.dart';
 import 'package:flutter_blog/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
@@ -20,6 +22,18 @@ class Globals {
 
   User user;
   String token;
+
+  bool canManageArticle(Article article) {
+    return article.user.id == user.id || user.role.code | 8 == user.role.code;
+  }
+
+  bool canManageComment(Comment comment) {
+    return comment.user.id == user.id || user.role.code | 4 == user.role.code;
+  }
+
+  bool canManageUser() {
+    return user.role.code | 64 == user.role.code;
+  }
 
   readFromFile() async {
     SharedPreferences storage = await SharedPreferences.getInstance();
