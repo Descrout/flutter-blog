@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/providers/auth_provider.dart';
 import 'package:flutter_blog/utils/query_params.dart';
@@ -19,6 +21,29 @@ abstract class Blog {
       return Comment.fromJson(json) as T;
     }
     throw "Invalid model type $T";
+  }
+
+  static Future<Item<User>> changeImage(String path) async {
+    try {
+      final id = Globals.shared.user.id;
+      final uri = Uri.http(Globals.SERVER, '/api/users/$id/image');
+
+      final request = http.MultipartRequest('POST', uri);
+      request.headers['Authorization'] = 'Bearer ${Globals.shared.token}';
+      request.files.add(await http.MultipartFile.fromPath('img', path));
+
+      final req = await request.send();
+      final res = await http.Response.fromStream(req);
+
+      final parsed = convert.jsonDecode(res.body);
+
+      if (res.statusCode == 200) {
+        return Item<User>(data: User.fromJson(parsed));
+      }
+      throw Exception(parsed['error'] ?? 'Unknown error while updating image.');
+    } catch (e) {
+      return Item(error: e.toString());
+    }
   }
 
   static Future<Item<int>> postArticle(String title, String body) async {

@@ -30,6 +30,17 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<Item<User>> changePicture(String path) async {
+    final user = await Blog.changeImage(path);
+    if (user.success) {
+      Globals.shared.user = user.data;
+      Globals.shared.saveToFile();
+      notifyListeners();
+    }
+
+    return user;
+  }
+
   login(String email, String password) async {
     _status = AuthStatus.Authenticating;
     notifyListeners();
