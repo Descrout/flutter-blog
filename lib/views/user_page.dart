@@ -40,12 +40,17 @@ class UserPage extends StatelessWidget {
   Widget _userField(BuildContext context, User user) {
     return ListTile(
       leading: Image.network(user.getImageURL),
-      title: Text.rich(TextSpan(text: user.name, children: [
+      title: Text.rich(
         TextSpan(
-          text: ' · ${user.role.name}',
-          style: TextStyle(fontSize: 11, color: Colors.grey),
-        )
-      ])),
+          text: user.name,
+          children: [
+            TextSpan(
+              text: ' · ${user.role.name}',
+              style: TextStyle(fontSize: 11, color: Colors.grey),
+            )
+          ],
+        ),
+      ),
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

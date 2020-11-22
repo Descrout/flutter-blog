@@ -23,6 +23,28 @@ abstract class Blog {
     throw "Invalid model type $T";
   }
 
+  static Future<Item<User>> changeName(String name) async {
+    try {
+      final id = Globals.shared.user.id;
+      final uri =
+          Uri.http(Globals.SERVER, '/api/users/$id/name', {'name': name});
+      final res = await http.put(uri, headers: {
+        'content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${Globals.shared.token}',
+      });
+
+      final parsed = convert.jsonDecode(res.body);
+
+      if (res.statusCode == 200) {
+        return Item<User>(data: User.fromJson(parsed));
+      }
+      throw Exception(parsed['error'] ?? 'Unknown error while changing name');
+    } catch (e) {
+      return Item(error: e.toString().split(':')[1]);
+    }
+  }
+
   static Future<Item<User>> changeImage(String path) async {
     try {
       final id = Globals.shared.user.id;
