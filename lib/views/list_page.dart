@@ -6,6 +6,7 @@ import 'package:flutter_blog/providers/auth_provider.dart';
 import 'package:flutter_blog/providers/list_provider.dart';
 import 'package:flutter_blog/widgets/bottom_nav.dart';
 import 'package:flutter_blog/widgets/guest_drawer.dart';
+import 'package:flutter_blog/widgets/nothing_show.dart';
 import 'package:flutter_blog/widgets/user_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -104,22 +105,7 @@ class ListPage<T> extends StatelessWidget {
             Consumer<ListProvider<T>>(
               builder: (_, listProvider, __) => RefreshIndicator(
                 child: (listProvider.items.isEmpty
-                    ? ListView(
-                        children: [
-                          SizedBox(height: 50),
-                          Center(
-                              child:
-                                  Icon(Icons.mood_bad, color: Colors.indigo)),
-                          Center(
-                              child: Text(
-                            "Nothing to show.",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                color: Colors.indigo),
-                          )),
-                        ],
-                      )
+                    ? NothingToShow()
                     : _buildItems(listProvider)),
                 onRefresh: listProvider.refresh,
               ),

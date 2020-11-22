@@ -6,6 +6,7 @@ import 'package:flutter_blog/providers/user_provider.dart';
 import 'package:flutter_blog/utils/list_holder.dart';
 import 'package:flutter_blog/widgets/article_item.dart';
 import 'package:flutter_blog/widgets/comment_item.dart';
+import 'package:flutter_blog/widgets/nothing_show.dart';
 import 'package:provider/provider.dart';
 
 class UserPage extends StatelessWidget {
@@ -95,17 +96,20 @@ class UserPage extends StatelessWidget {
         return RefreshIndicator(
           onRefresh:
               Provider.of<UserProvider>(context, listen: false).refreshPosted,
-          child: ListView.separated(
-            itemBuilder: (ctx, i) {
-              if (i < posted.length) {
-                return ArticleItem(posted[i]);
-              }
-              Provider.of<UserProvider>(context, listen: false).fetchPosted();
-              return Center(child: CircularProgressIndicator());
-            },
-            separatorBuilder: (ctx, i) => Divider(),
-            itemCount: posted.listLength,
-          ),
+          child: posted.isEmpty
+              ? NothingToShow()
+              : ListView.separated(
+                  itemBuilder: (ctx, i) {
+                    if (i < posted.length) {
+                      return ArticleItem(posted[i]);
+                    }
+                    Provider.of<UserProvider>(context, listen: false)
+                        .fetchPosted();
+                    return Center(child: CircularProgressIndicator());
+                  },
+                  separatorBuilder: (ctx, i) => Divider(),
+                  itemCount: posted.listLength,
+                ),
         );
       },
       selector: (_, up) => up.posted,
@@ -119,18 +123,20 @@ class UserPage extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: Provider.of<UserProvider>(context, listen: false)
               .refreshFavorited,
-          child: ListView.separated(
-            itemBuilder: (ctx, i) {
-              if (i < favorited.length) {
-                return ArticleItem(favorited[i]);
-              }
-              Provider.of<UserProvider>(context, listen: false)
-                  .fetchFavorited();
-              return Center(child: CircularProgressIndicator());
-            },
-            separatorBuilder: (ctx, i) => Divider(),
-            itemCount: favorited.listLength,
-          ),
+          child: favorited.isEmpty
+              ? NothingToShow()
+              : ListView.separated(
+                  itemBuilder: (ctx, i) {
+                    if (i < favorited.length) {
+                      return ArticleItem(favorited[i]);
+                    }
+                    Provider.of<UserProvider>(context, listen: false)
+                        .fetchFavorited();
+                    return Center(child: CircularProgressIndicator());
+                  },
+                  separatorBuilder: (ctx, i) => Divider(),
+                  itemCount: favorited.listLength,
+                ),
         );
       },
       selector: (_, up) => up.favorited,
@@ -144,17 +150,20 @@ class UserPage extends StatelessWidget {
         return RefreshIndicator(
           onRefresh:
               Provider.of<UserProvider>(context, listen: false).refreshComments,
-          child: ListView.separated(
-            itemBuilder: (ctx, i) {
-              if (i < comments.length) {
-                return CommentItem(comments[i], false);
-              }
-              Provider.of<UserProvider>(context, listen: false).fetchComments();
-              return Center(child: CircularProgressIndicator());
-            },
-            separatorBuilder: (ctx, i) => Divider(),
-            itemCount: comments.listLength,
-          ),
+          child: comments.isEmpty
+              ? NothingToShow()
+              : ListView.separated(
+                  itemBuilder: (ctx, i) {
+                    if (i < comments.length) {
+                      return CommentItem(comments[i], false);
+                    }
+                    Provider.of<UserProvider>(context, listen: false)
+                        .fetchComments();
+                    return Center(child: CircularProgressIndicator());
+                  },
+                  separatorBuilder: (ctx, i) => Divider(),
+                  itemCount: comments.listLength,
+                ),
         );
       },
       selector: (_, up) => up.comments,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blog/providers/comments_provider.dart';
 import 'package:flutter_blog/utils/styles.dart';
 import 'package:flutter_blog/widgets/comment_item.dart';
+import 'package:flutter_blog/widgets/nothing_show.dart';
 import 'package:provider/provider.dart';
 
 class CommentsPage extends StatelessWidget {
@@ -48,31 +49,17 @@ class CommentsPage extends StatelessWidget {
   }
 
   Widget _buildItems(CommentsProvider comments) {
-    if (comments.items.isEmpty) {
-      return ListView(
-        children: [
-          SizedBox(height: 50),
-          Center(child: Icon(Icons.mood_bad, color: Colors.indigo)),
-          Center(
-              child: Text(
-            "Nothing to show.",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: Colors.indigo),
-          )),
-        ],
-      );
-    }
-    return ListView.separated(
-        itemBuilder: (ctx, i) {
-          if (i < comments.items.length) {
-            return CommentItem(comments.items[i], true);
-          }
-          comments.fetch();
-          return Center(child: CircularProgressIndicator());
-        },
-        separatorBuilder: (ctx, i) => Divider(),
-        itemCount: comments.items.listLength);
+    return comments.items.isEmpty
+        ? NothingToShow()
+        : ListView.separated(
+            itemBuilder: (ctx, i) {
+              if (i < comments.items.length) {
+                return CommentItem(comments.items[i], true);
+              }
+              comments.fetch();
+              return Center(child: CircularProgressIndicator());
+            },
+            separatorBuilder: (ctx, i) => Divider(),
+            itemCount: comments.items.listLength);
   }
 }

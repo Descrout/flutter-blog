@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/providers/auth_provider.dart';
 import 'package:flutter_blog/utils/query_params.dart';
