@@ -30,6 +30,17 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<Item<User>> changeEmail(String email, String password) async {
+    final user = await Blog.changeEmail(email, password);
+    if (user.success) {
+      Globals.shared.user = user.data;
+      Globals.shared.saveToFile();
+      notifyListeners();
+    }
+
+    return user;
+  }
+
   Future<Item<User>> changeName(String name) async {
     final user = await Blog.changeName(name);
     if (user.success) {

@@ -44,6 +44,7 @@ class UserDrawer extends StatelessWidget {
                 context.read<ListProvider<Article>>().refresh();
                 context.read<ListProvider<User>>().refresh();
               }
+              Scaffold.of(context).removeCurrentSnackBar();
               Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text(res.error ?? 'Name changed successfuly.')));
               Navigator.of(context).pop();
@@ -59,6 +60,7 @@ class UserDrawer extends StatelessWidget {
               if (res.success) {
                 context.read<ListProvider<User>>().refresh();
               }
+              Scaffold.of(context).removeCurrentSnackBar();
               Scaffold.of(context).showSnackBar(SnackBar(
                   content:
                       Text(res.error ?? 'Profile pic successfuly updated.')));
@@ -68,6 +70,28 @@ class UserDrawer extends StatelessWidget {
           leading: Icon(Icons.image),
           title: Text('Change Picture'),
         ),
+        ListTile(
+          onTap: () async {
+            final res = await _showEmailChanger(context);
+            if (res != null) {
+              if (res.success) {
+                context.read<ListProvider<User>>().refresh();
+              }
+              Scaffold.of(context).removeCurrentSnackBar();
+              Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(res.error ?? 'Email changed successfuly.')));
+              Navigator.of(context).pop();
+            }
+          },
+          leading: Icon(Icons.mail),
+          title: Text('Change Email'),
+        ),
+        ListTile(
+          onTap: () async {},
+          leading: Icon(Icons.vpn_key),
+          title: Text('Change Password'),
+        ),
+        Divider(),
         ListTile(
           onTap: () {
             context.read<AuthProvider>().logout();
@@ -93,16 +117,66 @@ class UserDrawer extends StatelessWidget {
     );
   }
 
+  Future<Item<User>> _showEmailChanger(context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    return showDialog<Item<User>>(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => AlertDialog(
+        content: SizedBox(
+          height: 135,
+          child: ListView(
+            children: [
+              TextField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: Styles.input
+                    .copyWith(hintText: 'New Email', labelText: 'New Email'),
+              ),
+              Divider(),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: Styles.input.copyWith(
+                    hintText: 'Current Password',
+                    labelText: 'Current Password'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                final email = emailController.text;
+                final password = passwordController.text;
+                if (email == null ||
+                    password == null ||
+                    email == "" ||
+                    password == "") return;
+                final res =
+                    await ctx.read<AuthProvider>().changeEmail(email, password);
+                emailController.dispose();
+                passwordController.dispose();
+                Navigator.of(ctx).pop(res);
+              },
+              child: Text("OK")),
+        ],
+      ),
+    );
+  }
+
   Future<Item<User>> _showNameChanger(context) {
     final nameController = TextEditingController();
     return showDialog<Item<User>>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true,
       builder: (ctx) => AlertDialog(
         title: Text("Type new name : "),
         content: TextField(
           controller: nameController,
-          decoration: Styles.input,
+          decoration:
+              Styles.input.copyWith(hintText: 'Name', labelText: 'Name'),
         ),
         actions: [
           TextButton(
@@ -110,6 +184,7 @@ class UserDrawer extends StatelessWidget {
                 final name = nameController.text;
                 if (name == null || name == "") return;
                 final res = await ctx.read<AuthProvider>().changeName(name);
+                nameController.dispose();
                 Navigator.of(ctx).pop(res);
               },
               child: Text("OK")),
