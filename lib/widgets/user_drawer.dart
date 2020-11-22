@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blog/blog_api.dart';
 import 'package:flutter_blog/globals.dart';
 import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/models/user.dart';
@@ -87,7 +88,15 @@ class UserDrawer extends StatelessWidget {
           title: Text('Change Email'),
         ),
         ListTile(
-          onTap: () async {},
+          onTap: () async {
+            final res = await _showPasswordChanger(context);
+            if (res != null) {
+              Scaffold.of(context).removeCurrentSnackBar();
+              Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(res.error ?? 'Password changed successfuly.')));
+              Navigator.of(context).pop();
+            }
+          },
           leading: Icon(Icons.vpn_key),
           title: Text('Change Password'),
         ),
@@ -113,6 +122,54 @@ class UserDrawer extends StatelessWidget {
         image: DecorationImage(
             image: NetworkImage(Globals.shared.user.getImageURL),
             fit: BoxFit.cover),
+      ),
+    );
+  }
+
+  Future<Item<User>> _showPasswordChanger(context) {
+    final newPassController = TextEditingController();
+    final curPassController = TextEditingController();
+    return showDialog<Item<User>>(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => AlertDialog(
+        content: SizedBox(
+          height: 135,
+          child: ListView(
+            children: [
+              TextField(
+                controller: newPassController,
+                obscureText: true,
+                decoration: Styles.input.copyWith(
+                    hintText: 'New Password', labelText: 'New Password'),
+              ),
+              Divider(),
+              TextField(
+                controller: curPassController,
+                obscureText: true,
+                decoration: Styles.input.copyWith(
+                    hintText: 'Current Password',
+                    labelText: 'Current Password'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                final newPass = newPassController.text;
+                final curPass = curPassController.text;
+                if (newPass == null ||
+                    curPass == null ||
+                    newPass == "" ||
+                    curPass == "") return;
+                final res = await Blog.changePassword(newPass, curPass);
+                newPassController.dispose();
+                curPassController.dispose();
+                Navigator.of(ctx).pop(res);
+              },
+              child: Text("OK")),
+        ],
       ),
     );
   }
