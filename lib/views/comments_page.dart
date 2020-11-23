@@ -54,7 +54,7 @@ class CommentsPage extends StatelessWidget {
         : ListView.separated(
             itemBuilder: (ctx, i) {
               if (i < comments.items.length) {
-                return CommentItem(comments.items[i], true);
+                return CommentItem(comments.items[i]);
               }
               comments.fetch();
               return Center(child: CircularProgressIndicator());

@@ -155,7 +155,7 @@ class UserPage extends StatelessWidget {
               : ListView.separated(
                   itemBuilder: (ctx, i) {
                     if (i < comments.length) {
-                      return CommentItem(comments[i], false);
+                      return CommentItem(comments[i]);
                     }
                     Provider.of<UserProvider>(context, listen: false)
                         .fetchComments();

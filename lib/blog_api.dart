@@ -70,6 +70,29 @@ abstract class Blog {
     }
   }
 
+  static Future<String> editComment(int id, String body) async {
+    try {
+      final uri = Uri.http(Globals.SERVER, '/api/comments/id/$id');
+      final res = await http.put(uri,
+          headers: {
+            'content-type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${Globals.shared.token}',
+          },
+          body: convert.jsonEncode({'body': body}));
+
+      final parsed = convert.jsonDecode(res.body);
+
+      if (res.statusCode == 200) {
+        return null;
+      }
+      throw Exception(
+          parsed['error'] ?? 'Unknown error while editing article.');
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   static Future<Item<int>> editArticle(
       int id, String title, String body) async {
     try {

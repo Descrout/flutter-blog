@@ -28,8 +28,8 @@ class EditItem<T> extends StatelessWidget {
           Scaffold.of(context).showSnackBar(
               SnackBar(content: Text(error ?? '$what removed successfuly.')));
         } else if (type == EditType.UPDATE) {
-          final tempArticle = await Blog.getSingle<T>(endpoint);
-          if (tempArticle.success) onUpdate(tempArticle.data);
+          final tempItem = await Blog.getSingle<T>(endpoint);
+          if (tempItem.success) onUpdate(tempItem.data);
         }
       },
       child: Icon(Icons.edit),
