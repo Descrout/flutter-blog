@@ -4,6 +4,7 @@ import 'package:flutter_blog/providers/article_provider.dart';
 import 'package:flutter_blog/providers/comments_provider.dart';
 import 'package:flutter_blog/providers/user_provider.dart';
 import 'package:flutter_blog/views/article_page.dart';
+import 'package:flutter_blog/views/contact_page.dart';
 import 'package:flutter_blog/views/update_article.dart';
 import 'package:flutter_blog/views/landing_page.dart';
 import 'package:flutter_blog/views/login_page.dart';
@@ -35,6 +36,7 @@ abstract class Routes {
     Users: UsersPage(),
     Login: LoginPage(),
     Register: RegisterPage(),
+    Contact: ContactPage(),
   };
 
   static MaterialPageRoute generate(RouteSettings settings) =>
