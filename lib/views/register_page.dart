@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/blog_api.dart';
-import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/models/user.dart';
-import 'package:flutter_blog/providers/auth_provider.dart';
 import 'package:flutter_blog/providers/list_provider.dart';
 import 'package:flutter_blog/providers/validation_provider.dart';
 import 'package:flutter_blog/utils/styles.dart';
 import 'package:flutter_blog/views/routes.dart';
-import 'package:flutter_blog/widgets/request_dialog.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {

@@ -13,7 +13,7 @@ class Role {
         return Colors.orangeAccent;
       case 2:
         return Colors.orange;
-      case 3:
+      default:
         return Colors.deepOrange;
     }
   }

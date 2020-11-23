@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog/blog_api.dart';
 import 'package:flutter_blog/globals.dart';
 import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/providers/list_provider.dart';

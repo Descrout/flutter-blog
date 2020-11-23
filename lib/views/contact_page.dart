@@ -59,57 +59,55 @@ class ContactPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
-        child: Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  "https://avatars1.githubusercontent.com/u/3063434?s=460&u=22ef71e7dfa51f4e1e3bedf8512bd8debd392583&v=4",
-                  height: 200.0,
-                  width: 200.0,
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.network(
+                "https://avatars1.githubusercontent.com/u/3063434?s=460&u=22ef71e7dfa51f4e1e3bedf8512bd8debd392583&v=4",
+                height: 200.0,
+                width: 200.0,
               ),
-              SizedBox(height: 16),
-              Text("Adil Basar", style: Styles.h1),
-              Divider(),
-              ListTile(
-                onTap: () async {
-                  const url = 'https://github.com/Descrout';
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text('Cannot launch $url'),
-                    ));
-                  }
-                },
-                leading: Icon(Icons.code),
-                title: Text("github.com/Descrout"),
-              ),
-              Divider(),
-              ListTile(
-                onTap: () async {
-                  final url = Uri(
-                      scheme: 'mailto',
-                      path: 'adilbasar.dev@gmail.com',
-                      queryParameters: {
-                        'subject': 'About the flutter blog app.',
-                      }).toString();
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text('Cannot email to $url'),
-                    ));
-                  }
-                },
-                leading: Icon(Icons.mail),
-                title: Text("adilbasar.dev@gmail.com"),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 16),
+            Text("Adil Basar", style: Styles.h1),
+            Divider(),
+            ListTile(
+              onTap: () async {
+                const url = 'https://github.com/Descrout';
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('Cannot launch $url'),
+                  ));
+                }
+              },
+              leading: Icon(Icons.code),
+              title: Text("github.com/Descrout"),
+            ),
+            Divider(),
+            ListTile(
+              onTap: () async {
+                final url = Uri(
+                    scheme: 'mailto',
+                    path: 'adilbasar.dev@gmail.com',
+                    queryParameters: {
+                      'subject': 'About the flutter blog app.',
+                    }).toString();
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('Cannot email to $url'),
+                  ));
+                }
+              },
+              leading: Icon(Icons.mail),
+              title: Text("adilbasar.dev@gmail.com"),
+            ),
+          ],
         ),
       ),
     );
