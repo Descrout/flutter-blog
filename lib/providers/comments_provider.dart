@@ -1,9 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blog/blog_api.dart';
 import 'package:flutter_blog/globals.dart';
+import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/models/comment.dart';
+import 'package:flutter_blog/providers/article_provider.dart';
+import 'package:flutter_blog/providers/list_provider.dart';
 import 'package:flutter_blog/utils/list_holder.dart';
 import 'package:flutter_blog/utils/query_params.dart';
+import 'package:provider/provider.dart';
 
 class CommentsProvider with ChangeNotifier {
   final int articleID;
@@ -37,6 +41,7 @@ class CommentsProvider with ChangeNotifier {
 
     if (comment.success) {
       sendError = null;
+      Provider.of<ListProvider<Article>>(ctx, listen: false).refresh();
       await refresh();
     } else {
       sendError = comment.error;

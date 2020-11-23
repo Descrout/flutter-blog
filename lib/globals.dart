@@ -24,15 +24,17 @@ class Globals {
   String token;
 
   bool canManageArticle(Article article) {
-    return article.user.id == user.id || user.role.code | 8 == user.role.code;
+    return user != null &&
+        (article.user.id == user.id || user.role.code | 8 == user.role.code);
   }
 
   bool canManageComment(Comment comment) {
-    return comment.user.id == user.id || user.role.code | 4 == user.role.code;
+    return user != null &&
+        (comment.user.id == user.id || user.role.code | 4 == user.role.code);
   }
 
   bool canManageUser() {
-    return user.role.code | 64 == user.role.code;
+    return user != null && (user.role.code | 64 == user.role.code);
   }
 
   readFromFile() async {

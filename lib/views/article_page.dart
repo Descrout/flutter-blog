@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/models/article.dart';
 import 'package:flutter_blog/providers/article_provider.dart';
+import 'package:flutter_blog/providers/list_provider.dart';
 import 'package:flutter_blog/views/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -65,6 +66,9 @@ class ArticlePage extends StatelessWidget {
               final error = await articleProvider.toggleFavorite(context);
               if (error != null) {
                 _showDialog(context, error);
+              } else {
+                Provider.of<ListProvider<Article>>(context, listen: false)
+                    .refresh();
               }
             } else if (i == 1)
               articleProvider.controller.animateTo(
