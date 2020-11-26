@@ -102,19 +102,19 @@ class ValidationProvider with ChangeNotifier {
   }
 
   void checkTitle(String title) {
-    if (title.trimLeft().trimRight().length > 10) {
+    if (title.trimLeft().trimRight().length > 5) {
       _title = Item(data: title);
     } else {
-      _title = Item(error: "Title must be atleast 10 character.");
+      _title = Item(error: "Title must be atleast 5 character.");
     }
     notifyListeners();
   }
 
   void checkBody(String body) {
-    if (body.trimLeft().trimRight().length > 20) {
+    if (body.trimLeft().trimRight().length > 10) {
       _body = Item(data: body);
     } else {
-      _body = Item(error: "Body must be atleast 20 character.");
+      _body = Item(error: "Body must be atleast 10 character.");
     }
     notifyListeners();
   }
