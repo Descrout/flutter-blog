@@ -1,7 +1,6 @@
 # Flutter Blog App
 
-Simple flutter blog-like CRUD app that uses an external REST-API. 
-API was developed in GO and you can access it from [here](https://github.com/Descrout/go-blog). Provider was used as a state management solution.
+Simple flutter blog-like CRUD app that uses an external REST-API.<br/>API was developed in GO and you can access it from [here](https://github.com/Descrout/go-blog). Provider was used as a state management solution.
 
 |![login](./showcase/pic1.jpeg)|![drawer](./showcase/pic5.jpeg)|![profile](./showcase/pic0.jpeg)|
 |--|--|--|
